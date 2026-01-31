@@ -1,0 +1,19 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+
+# macOS
+.DS_Store
+
+# Cursor / IDE
+.idea/
+
+# Swift Package Manager
+.build/
+.swiftpm/

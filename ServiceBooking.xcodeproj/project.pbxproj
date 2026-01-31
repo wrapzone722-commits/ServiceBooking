@@ -1,0 +1,538 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		001 /* ServiceBookingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101; };
+		002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102; };
+		003 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103; };
+		004 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104; };
+		005 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105; };
+		006 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106; };
+		007 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107; };
+		008 /* ServicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108; };
+		009 /* BookingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109; };
+		010 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110; };
+		011 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111; };
+		012 /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112; };
+		013 /* BookingCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113; };
+		014 /* BookingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114; };
+		015 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115; };
+		016 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 116; };
+		017 /* NetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117; };
+		018 /* AccessibilityModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118; };
+		023 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124; };
+		019 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 119; };
+		022 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123; };
+		020 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 120; };
+		021 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 121; };
+		024 /* ConsoleConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125; };
+		025 /* QRCodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126; };
+		026 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127; };
+		027 /* QRScanOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128; };
+		028 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129; };
+		029 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130; };
+		030 /* ClientRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131; };
+		031 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132; };
+		032 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		100 /* ServiceBooking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiceBooking.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		101 /* ServiceBookingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBookingApp.swift; sourceTree = "<group>"; };
+		102 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		103 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		104 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
+		105 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		106 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		107 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		108 /* ServicesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewModel.swift; sourceTree = "<group>"; };
+		109 /* BookingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingsViewModel.swift; sourceTree = "<group>"; };
+		110 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		111 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		112 /* ServiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceDetailView.swift; sourceTree = "<group>"; };
+		113 /* BookingCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingCreationView.swift; sourceTree = "<group>"; };
+		114 /* BookingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingsView.swift; sourceTree = "<group>"; };
+		115 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		116 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		117 /* NetworkStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatusView.swift; sourceTree = "<group>"; };
+		118 /* AccessibilityModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityModifiers.swift; sourceTree = "<group>"; };
+		119 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		120 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		121 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		122 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		123 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		124 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		125 /* ConsoleConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleConfig.swift; sourceTree = "<group>"; };
+		126 /* QRCodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeParser.swift; sourceTree = "<group>"; };
+		127 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		128 /* QRScanOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanOnboardingView.swift; sourceTree = "<group>"; };
+		129 /* DemoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoData.swift; sourceTree = "<group>"; };
+		130 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		131 /* ClientRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientRegistry.swift; sourceTree = "<group>"; };
+		132 /* KeychainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
+		133 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		200 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		300 = {
+			isa = PBXGroup;
+			children = (
+				301 /* ServiceBooking */,
+				302 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		301 /* ServiceBooking */ = {
+			isa = PBXGroup;
+			children = (
+				122 /* Info.plist */,
+				121 /* PrivacyInfo.xcprivacy */,
+				101 /* ServiceBookingApp.swift */,
+				102 /* ContentView.swift */,
+				303 /* Models */,
+				304 /* Services */,
+				305 /* ViewModels */,
+				306 /* Views */,
+				307 /* Resources */,
+			);
+			path = ServiceBooking;
+			sourceTree = "<group>";
+		};
+		302 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				100 /* ServiceBooking.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		303 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				103 /* Service.swift */,
+				104 /* Booking.swift */,
+				105 /* User.swift */,
+				133 /* Post.swift */,
+				129 /* DemoData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		304 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				106 /* APIService.swift */,
+				107 /* NetworkMonitor.swift */,
+				125 /* ConsoleConfig.swift */,
+				126 /* QRCodeParser.swift */,
+				130 /* AppRouter.swift */,
+				131 /* ClientRegistry.swift */,
+				132 /* KeychainStorage.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		305 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				108 /* ServicesViewModel.swift */,
+				109 /* BookingsViewModel.swift */,
+				110 /* ProfileViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		306 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				311 /* Components */,
+				308 /* Home */,
+				309 /* Bookings */,
+				310 /* Profile */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		307 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				116 /* Assets.xcassets */,
+				119 /* LaunchScreen.storyboard */,
+				120 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		308 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				111 /* HomeView.swift */,
+				112 /* ServiceDetailView.swift */,
+				113 /* BookingCreationView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		309 /* Bookings */ = {
+			isa = PBXGroup;
+			children = (
+				114 /* BookingsView.swift */,
+			);
+			path = Bookings;
+			sourceTree = "<group>";
+		};
+		310 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				115 /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		311 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				117 /* NetworkStatusView.swift */,
+				118 /* AccessibilityModifiers.swift */,
+				123 /* SplashView.swift */,
+				124 /* AppTheme.swift */,
+				127 /* QRScannerView.swift */,
+				128 /* QRScanOnboardingView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		400 /* ServiceBooking */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 500;
+			buildPhases = (
+				401 /* Sources */,
+				200 /* Frameworks */,
+				402 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ServiceBooking;
+			productName = ServiceBooking;
+			productReference = 100 /* ServiceBooking.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		600 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					400 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 601;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = ru;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ru,
+				Base,
+			);
+			mainGroup = 300;
+			productRefGroup = 302 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				400 /* ServiceBooking */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		402 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				016 /* Assets.xcassets in Resources */,
+				019 /* LaunchScreen.storyboard in Resources */,
+				020 /* Localizable.xcstrings in Resources */,
+				021 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		401 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				001 /* ServiceBookingApp.swift in Sources */,
+				002 /* ContentView.swift in Sources */,
+				003 /* Service.swift in Sources */,
+				004 /* Booking.swift in Sources */,
+				005 /* User.swift in Sources */,
+				006 /* APIService.swift in Sources */,
+				007 /* NetworkMonitor.swift in Sources */,
+				008 /* ServicesViewModel.swift in Sources */,
+				009 /* BookingsViewModel.swift in Sources */,
+				010 /* ProfileViewModel.swift in Sources */,
+				011 /* HomeView.swift in Sources */,
+				012 /* ServiceDetailView.swift in Sources */,
+				013 /* BookingCreationView.swift in Sources */,
+				014 /* BookingsView.swift in Sources */,
+				015 /* ProfileView.swift in Sources */,
+				017 /* NetworkStatusView.swift in Sources */,
+				018 /* AccessibilityModifiers.swift in Sources */,
+				022 /* SplashView.swift in Sources */,
+				023 /* AppTheme.swift in Sources */,
+				024 /* ConsoleConfig.swift in Sources */,
+				025 /* QRCodeParser.swift in Sources */,
+				026 /* QRScannerView.swift in Sources */,
+				027 /* QRScanOnboardingView.swift in Sources */,
+				028 /* DemoData.swift in Sources */,
+				029 /* AppRouter.swift in Sources */,
+				030 /* ClientRegistry.swift in Sources */,
+				031 /* KeychainStorage.swift in Sources */,
+				032 /* Post.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		700 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		701 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		702 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M7434XB3SP;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ServiceBooking/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Service Booking";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.servicebooking.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		703 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M7434XB3SP;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ServiceBooking/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Service Booking";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.servicebooking.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		500 /* Build configuration list for PBXNativeTarget "ServiceBooking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				702 /* Debug */,
+				703 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		601 /* Build configuration list for PBXProject "ServiceBooking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				700 /* Debug */,
+				701 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 600 /* Project object */;
+}

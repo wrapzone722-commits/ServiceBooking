@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- App Transport Security -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<!-- Разрешить HTTP для локальной сети (192.168.x.x, 10.x.x.x) при разработке -->
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	
+	<!-- Описания разрешений (Privacy - Required by Apple) -->
+	<key>NSCameraUsageDescription</key>
+	<string>Приложению нужен доступ к камере для загрузки фото профиля</string>
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Приложению нужен доступ к фото для выбора изображения профиля</string>
+	
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Приложению нужен доступ для сохранения изображений</string>
+	
+	<key>NSContactsUsageDescription</key>
+	<string>Приложению нужен доступ к контактам для автозаполнения данных профиля</string>
+	
+	<key>NSCalendarsUsageDescription</key>
+	<string>Приложению нужен доступ к календарю для добавления напоминаний о записях</string>
+	
+	<!-- Локализация -->
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ru</string>
+		<string>en</string>
+	</array>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>ru</string>
+	
+	<!-- URL Schemes для deep linking -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>servicebooking</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.servicebooking.app</string>
+		</dict>
+	</array>
+	
+	<!--
+	Associated Domains и Push Notifications требуют entitlements и Development Team.
+	Добавьте через Xcode: Signing & Capabilities, когда настроите Apple Developer.
+	-->
+	
+	<!-- Ориентация экрана -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	
+	<!-- Требует полноэкранного режима (для iPhone без Home button) -->
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	
+	<!-- Минимальная версия iOS -->
+	<key>MinimumOSVersion</key>
+	<string>17.0</string>
+	
+	<!-- iTunes File Sharing -->
+	<key>UIFileSharingEnabled</key>
+	<false/>
+	
+	<!-- Статус бар -->
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+</dict>
+</plist>
