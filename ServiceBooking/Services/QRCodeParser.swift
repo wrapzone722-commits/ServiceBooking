@@ -18,7 +18,14 @@ enum QRCodeParser {
     /// Распарсить содержимое QR-кода
     /// Поддерживает: URL, JSON, servicebooking://
     static func parse(_ string: String) -> QRParseResult? {
-        let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Убираем невидимые символы, BOM, переносы — частая причина сбоя при сканировании QR
+        var trimmed = string
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\u{FEFF}", with: "") // BOM
+        trimmed = trimmed.components(separatedBy: .newlines).joined()
+        trimmed = String(trimmed.unicodeScalars.filter { !CharacterSet.controlCharacters.contains($0) })
+        
+        guard !trimmed.isEmpty else { return nil }
         
         // 1. JSON: {"base_url": "...", "token": "..."}
         if trimmed.hasPrefix("{") {
@@ -46,7 +53,7 @@ enum QRCodeParser {
             return nil
         }
         let token = json["token"] as? String ?? json["access_token"] as? String
-        return QRParseResult(baseURL: normalizeURL(baseURL), token: token?.isEmpty == true ? nil : token)
+        return QRParseResult(baseURL: ensureApiV1Suffix(normalizeURL(baseURL)), token: token?.isEmpty == true ? nil : token)
     }
     
     private static func parseCustomScheme(_ string: String) -> QRParseResult? {
@@ -71,15 +78,29 @@ enum QRCodeParser {
             return nil
         }
         
-        return QRParseResult(baseURL: normalizeURL(urlString), token: token)
+        return QRParseResult(baseURL: ensureApiV1Suffix(normalizeURL(urlString)), token: token)
     }
     
     private static func parseURL(_ string: String) -> QRParseResult? {
-        guard isValidURL(string) else { return nil }
-        
-        // Убираем / в конце, оставляем путь /v1 если есть
-        let normalized = normalizeURL(string)
+        // Пробуем декодировать percent-encoding (QR иногда кодирует спецсимволы)
+        let decoded = string.removingPercentEncoding ?? string
+        guard isValidURL(decoded) else { return nil }
+        let normalized = ensureApiV1Suffix(normalizeURL(decoded))
         return QRParseResult(baseURL: normalized, token: nil)
+    }
+
+    /// Убедиться, что baseURL заканчивается на /api/v1 (пути profile, bookings и т.д. совпадают с бэкендом)
+    private static func ensureApiV1Suffix(_ url: String) -> String {
+        var result = url
+        if result.hasSuffix("/") { result = String(result.dropLast()) }
+        if result.lowercased().hasSuffix("/api/v1") { return result }
+        guard let u = URL(string: result) else { return result }
+        let path = u.path
+        if path.isEmpty || path == "/" {
+            let base = result.hasSuffix("/") ? String(result.dropLast()) : result
+            return base + "/api/v1"
+        }
+        return result
     }
     
     private static func isValidURL(_ string: String) -> Bool {

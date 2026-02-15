@@ -39,12 +39,18 @@ enum ClientRegistry {
         KeychainStorage.deviceId
     }
     
+    /// Сессия с поддержкой VPN: ожидание подключения, увеличенный таймаут
+    private static var sharedSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.timeoutIntervalForRequest = 60
+        config.timeoutIntervalForResource = 120
+        config.waitsForConnectivity = true
+        return URLSession(configuration: config)
+    }()
+    
     /// Зарегистрировать клиента в веб-консоли и получить API-ключ
     static func register(baseURL: String) async throws -> RegisterClientResponse {
-        guard NetworkMonitor.shared.isConnected else {
-            throw APIError.noConnection
-        }
-        
         let urlString = baseURL.hasSuffix("/") ? baseURL + "clients/register" : baseURL + "/clients/register"
         guard let url = URL(string: urlString) else {
             throw APIError.invalidURL
@@ -52,8 +58,8 @@ enum ClientRegistry {
         
         let request = RegisterClientRequest(
             deviceId: deviceId,
-            platform: "iOS \(UIDevice.current.systemVersion)",
-            appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+            platform: await MainActor.run { "iOS \(UIDevice.current.systemVersion)" },
+            appVersion: await MainActor.run { Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0" }
         )
         
         var urlRequest = URLRequest(url: url)
@@ -61,11 +67,11 @@ enum ClientRegistry {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
         urlRequest.httpBody = try JSONEncoder().encode(request)
-        urlRequest.timeoutInterval = 30
+        urlRequest.timeoutInterval = 60
         
         let (data, response): (Data, URLResponse)
         do {
-            (data, response) = try await URLSession.shared.data(for: urlRequest)
+            (data, response) = try await sharedSession.data(for: urlRequest)
         } catch {
             throw APIError.networkError(error)
         }

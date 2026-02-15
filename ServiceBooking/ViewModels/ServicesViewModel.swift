@@ -41,16 +41,33 @@ class ServicesViewModel: ObservableObject {
     }
     
     /// Загрузить услуги с сервера
-    func loadServices() async {
+    func loadServices(silentRefresh: Bool = false) async {
         isLoading = true
-        errorMessage = nil
+        if !silentRefresh {
+            errorMessage = nil
+        }
         
         do {
             services = try await APIService.shared.fetchServices()
             categories = Array(Set(services.map { $0.category })).sorted()
+            if silentRefresh {
+                errorMessage = nil // Очищаем ошибку только при успехе
+            }
         } catch {
-            errorMessage = error.localizedDescription
-            services = []
+            // При silent refresh не показываем ошибку сразу, даём больше времени
+            if !silentRefresh {
+                errorMessage = error.localizedDescription
+                services = []
+            } else {
+                // При pull-to-refresh показываем ошибку только если данных нет совсем
+                if services.isEmpty {
+                    // Задержка перед показом ошибки при refresh
+                    try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
+                    if services.isEmpty {
+                        errorMessage = error.localizedDescription
+                    }
+                }
+            }
         }
         
         isLoading = false
@@ -58,7 +75,7 @@ class ServicesViewModel: ObservableObject {
     
     /// Обновить данные (pull-to-refresh)
     func refresh() async {
-        await loadServices()
+        await loadServices(silentRefresh: true)
     }
     
     /// Выбрать категорию

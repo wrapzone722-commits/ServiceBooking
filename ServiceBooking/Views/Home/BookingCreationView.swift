@@ -16,6 +16,17 @@ struct BookingCreationView: View {
     
     @State private var notes: String = ""
     @State private var showConfirmation = false
+    @State private var showErrorAlert = false
+    @State private var reminderTiming: ReminderTiming = .d1
+    
+    private static let calendar = Calendar.current
+    
+    /// Диапазон дат: только предстоящие, интервал 2 недели вперёд от сегодня
+    private static var dateRange: ClosedRange<Date> {
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.date(byAdding: .day, value: 14, to: start) ?? start
+        return start...end
+    }
     
     var body: some View {
         NavigationStack {
@@ -25,6 +36,7 @@ struct BookingCreationView: View {
                     dateSelectionSection
                     postSelectionSection
                     timeSelectionSection
+                    reminderSection
                     notesSection
                     Spacer(minLength: 100)
                 }
@@ -51,13 +63,25 @@ struct BookingCreationView: View {
                 }
             }
             .task {
+                clampSelectedDateToRange()
                 await bookingsViewModel.loadPosts()
                 await bookingsViewModel.loadAvailableSlots(serviceId: service.id, date: bookingsViewModel.selectedDate)
+            }
+            .onAppear {
+                clampSelectedDateToRange()
             }
             .alert("Запись создана!", isPresented: $showConfirmation) {
                 Button("Отлично") { dismiss() }
             } message: {
                 Text("Ваша запись на \(service.name) успешно создана. Ожидайте подтверждения.")
+            }
+            .alert("Ошибка записи", isPresented: $showErrorAlert) {
+                Button("OK") {
+                    showErrorAlert = false
+                    bookingsViewModel.errorMessage = nil
+                }
+            } message: {
+                Text(bookingsViewModel.errorMessage ?? "Не удалось создать запись.")
             }
         }
     }
@@ -98,7 +122,7 @@ struct BookingCreationView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(AppTheme.label)
             
-            DatePicker("Дата", selection: $bookingsViewModel.selectedDate, in: Date()..., displayedComponents: .date)
+            DatePicker("Дата", selection: $bookingsViewModel.selectedDate, in: Self.dateRange, displayedComponents: .date)
                 .datePickerStyle(.graphical)
                 .environment(\.locale, Locale(identifier: "ru_RU"))
         }
@@ -113,13 +137,33 @@ struct BookingCreationView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(AppTheme.label)
                 
-                Picker("Пост", selection: $bookingsViewModel.selectedPostId) {
-                    ForEach(bookingsViewModel.posts.filter { $0.isEnabled }) { post in
-                        Text(post.name).tag(post.id)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(bookingsViewModel.posts.filter { $0.isEnabled }) { post in
+                            PostChipButton(
+                                post: post,
+                                isSelected: bookingsViewModel.selectedPostId == post.id
+                            ) {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    bookingsViewModel.selectedPostId = post.id
+                                }
+                            }
+                        }
                     }
+                    .padding(.vertical, 4)
                 }
-                .pickerStyle(.menu)
             }
+        }
+    }
+    
+    /// Ограничить выбранную дату диапазоном «сегодня — +2 недели»
+    private func clampSelectedDateToRange() {
+        let start = Self.calendar.startOfDay(for: Date())
+        guard let end = Self.calendar.date(byAdding: .day, value: 14, to: start) else { return }
+        if bookingsViewModel.selectedDate < start {
+            bookingsViewModel.selectedDate = start
+        } else if bookingsViewModel.selectedDate > end {
+            bookingsViewModel.selectedDate = end
         }
     }
     
@@ -155,6 +199,22 @@ struct BookingCreationView: View {
                     }
                 }
             }
+        }
+    }
+    
+    private var reminderSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Напомнить о записи")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(AppTheme.label)
+            
+            Picker("", selection: $reminderTiming) {
+                ForEach(ReminderTiming.allCases) { option in
+                    Text(option.displayName).tag(option)
+                }
+            }
+            .pickerStyle(.segmented)
         }
     }
     
@@ -196,7 +256,11 @@ struct BookingCreationView: View {
                 Button {
                     Task {
                         let success = await bookingsViewModel.createBooking(serviceId: service.id, notes: notes.isEmpty ? nil : notes)
-                        if success { showConfirmation = true }
+                        if success {
+                            showConfirmation = true
+                        } else {
+                            showErrorAlert = true
+                        }
                     }
                 } label: {
                     HStack {
@@ -217,7 +281,7 @@ struct BookingCreationView: View {
             .background(AppTheme.secondaryBackground)
         }
     }
-    
+
     private func formatSelectedDateTime() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ru_RU")
@@ -225,6 +289,37 @@ struct BookingCreationView: View {
         let dateString = formatter.string(from: bookingsViewModel.selectedDate)
         let timeString = bookingsViewModel.selectedSlot?.formattedTime ?? ""
         return "\(dateString), \(timeString)"
+    }
+}
+
+// MARK: - Post (бокс) — интерактивная кнопка-чип
+
+struct PostChipButton: View {
+    let post: Post
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 6) {
+                Image(systemName: "square.grid.2x2.fill")
+                    .font(.caption)
+                Text(post.name)
+                    .font(.subheadline)
+                    .fontWeight(isSelected ? .semibold : .medium)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(isSelected ? Color.accentColor : AppTheme.tertiaryBackground)
+            .foregroundStyle(isSelected ? .white : AppTheme.label)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }
 

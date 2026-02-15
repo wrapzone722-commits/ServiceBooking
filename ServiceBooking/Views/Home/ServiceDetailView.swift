@@ -27,10 +27,10 @@ struct ServiceDetailView: View {
                     
                     Spacer(minLength: 100)
                 }
-            .padding()
-        }
-        .scrollContentBackground(.hidden)
-        .background(AppTheme.background)
+                .padding()
+            }
+            .scrollContentBackground(.hidden)
+            .background(AppTheme.background)
             .navigationTitle("Детали услуги")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

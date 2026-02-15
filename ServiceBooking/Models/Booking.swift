@@ -38,6 +38,8 @@ struct Booking: Identifiable, Codable {
     let duration: Int
     let notes: String?
     let createdAt: Date
+    /// Когда администратор перевёл запись в «В процессе» (для точного таймера виджета при автозапуске).
+    let inProgressStartedAt: Date?
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -50,6 +52,7 @@ struct Booking: Identifiable, Codable {
         case duration
         case notes
         case createdAt = "created_at"
+        case inProgressStartedAt = "in_progress_started_at"
     }
     
     var formattedDate: String {
@@ -124,9 +127,9 @@ struct TimeSlot: Identifiable, Codable, Hashable {
 #if DEBUG
 extension Booking {
     static let preview: [Booking] = [
-        Booking(id: "1", serviceId: "1", serviceName: "Химчистка салона", userId: "u1", dateTime: Calendar.current.date(byAdding: .day, value: 2, to: Date())!, status: .confirmed, price: 5000, duration: 180, notes: nil, createdAt: Date()),
-        Booking(id: "2", serviceId: "4", serviceName: "Полировка фар", userId: "u1", dateTime: Calendar.current.date(byAdding: .day, value: 5, to: Date())!, status: .pending, price: 1500, duration: 45, notes: nil, createdAt: Date()),
-        Booking(id: "3", serviceId: "2", serviceName: "Мойка кузова", userId: "u1", dateTime: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, status: .completed, price: 800, duration: 30, notes: nil, createdAt: Date()),
+        Booking(id: "1", serviceId: "1", serviceName: "Химчистка салона", userId: "u1", dateTime: Calendar.current.date(byAdding: .day, value: 2, to: Date())!, status: .confirmed, price: 5000, duration: 180, notes: nil, createdAt: Date(), inProgressStartedAt: nil),
+        Booking(id: "2", serviceId: "4", serviceName: "Полировка фар", userId: "u1", dateTime: Calendar.current.date(byAdding: .day, value: 5, to: Date())!, status: .pending, price: 1500, duration: 45, notes: nil, createdAt: Date(), inProgressStartedAt: nil),
+        Booking(id: "3", serviceId: "2", serviceName: "Мойка кузова", userId: "u1", dateTime: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, status: .completed, price: 800, duration: 30, notes: nil, createdAt: Date(), inProgressStartedAt: nil),
     ]
 }
 #endif

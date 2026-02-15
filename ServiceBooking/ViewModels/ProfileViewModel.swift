@@ -25,23 +25,60 @@ class ProfileViewModel: ObservableObject {
     @Published var editLastName = ""
     @Published var editEmail = ""
     @Published var editTelegram = ""
-    @Published var editWhatsApp = ""
-    @Published var editInstagram = ""
     @Published var editVK = ""
-    
+
+    // Список автомобилей для выбора
+    @Published private(set) var cars: [Car] = []
+    @Published private(set) var isLoadingCars = false
+
+    /// Отображаемое фото авто: задаётся только при выборе автомобиля в профиле, не перезаписывается при загрузке профиля
+    @Published private(set) var displayedCarId: String?
+    @Published private(set) var displayedCarImageURL: String?
+
+    private static let displayedCarIdKey = "profile_displayed_car_id"
+    private static let displayedCarImageURLKey = "profile_displayed_car_image_url"
+
+    init() {
+        displayedCarId = UserDefaults.standard.string(forKey: Self.displayedCarIdKey)
+        displayedCarImageURL = UserDefaults.standard.string(forKey: Self.displayedCarImageURLKey)
+    }
+
     // MARK: - API Methods
     
     /// Загрузить профиль с сервера
-    func loadProfile() async {
+    func loadProfile(silentRefresh: Bool = false) async {
         isLoading = true
-        errorMessage = nil
+        if !silentRefresh {
+            errorMessage = nil
+        }
         
         do {
             user = try await APIService.shared.fetchProfile()
             syncEditFields()
+            // Один раз подхватываем отображаемое авто из профиля (после переустановки или с другого устройства)
+            if displayedCarId == nil, let sid = user?.selectedCarId, !sid.isEmpty {
+                displayedCarId = sid
+                displayedCarImageURL = user?.avatarURL
+                saveDisplayedCar()
+            }
+            if silentRefresh {
+                errorMessage = nil // Очищаем ошибку только при успехе
+            }
         } catch {
-            errorMessage = error.localizedDescription
-            user = nil
+            // При silent refresh не показываем ошибку сразу, даём больше времени
+            if !silentRefresh {
+                errorMessage = error.localizedDescription
+                user = nil
+            } else {
+                // При pull-to-refresh показываем ошибку только если данных нет совсем
+                if user == nil {
+                    // Задержка перед показом ошибки при refresh
+                    try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
+                    if user == nil {
+                        errorMessage = error.localizedDescription
+                    }
+                }
+            }
         }
         
         isLoading = false
@@ -55,8 +92,6 @@ class ProfileViewModel: ObservableObject {
         do {
             let socialLinks = SocialLinks(
                 telegram: editTelegram.isEmpty ? nil : editTelegram,
-                whatsapp: editWhatsApp.isEmpty ? nil : editWhatsApp,
-                instagram: editInstagram.isEmpty ? nil : editInstagram,
                 vk: editVK.isEmpty ? nil : editVK
             )
             
@@ -64,6 +99,7 @@ class ProfileViewModel: ObservableObject {
                 firstName: editFirstName,
                 lastName: editLastName,
                 email: editEmail.isEmpty ? nil : editEmail,
+                selectedCarId: user?.selectedCarId ?? nil,
                 socialLinks: socialLinks
             )
             
@@ -88,8 +124,6 @@ class ProfileViewModel: ObservableObject {
         editLastName = user.lastName
         editEmail = user.email ?? ""
         editTelegram = user.socialLinks?.telegram ?? ""
-        editWhatsApp = user.socialLinks?.whatsapp ?? ""
-        editInstagram = user.socialLinks?.instagram ?? ""
         editVK = user.socialLinks?.vk ?? ""
     }
     
@@ -115,17 +149,6 @@ class ProfileViewModel: ObservableObject {
             if let t = user.socialLinks?.telegram {
                 urlString = "https://t.me/\(t.replacingOccurrences(of: "@", with: ""))"
             }
-        case .whatsapp:
-            if let w = user.socialLinks?.whatsapp {
-                let clean = w.replacingOccurrences(of: "+", with: "")
-                    .replacingOccurrences(of: " ", with: "")
-                    .replacingOccurrences(of: "-", with: "")
-                urlString = "https://wa.me/\(clean)"
-            }
-        case .instagram:
-            if let i = user.socialLinks?.instagram {
-                urlString = "https://instagram.com/\(i)"
-            }
         case .vk:
             if let v = user.socialLinks?.vk {
                 urlString = "https://vk.com/\(v)"
@@ -145,10 +168,52 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
+    /// Загрузить список автомобилей
+    func loadCars() async {
+        isLoadingCars = true
+        do {
+            cars = try await APIService.shared.fetchCars()
+        } catch {
+            cars = []
+        }
+        isLoadingCars = false
+    }
+
+    /// Выбрать автомобиль и сохранить в профиле. Фото авто становится статичным — меняется только при новом выборе в профиле.
+    func selectCar(_ car: Car) async -> Bool {
+        guard let u = user else { return false }
+        let request = UpdateProfileRequest(
+            firstName: u.firstName,
+            lastName: u.lastName,
+            email: u.email,
+            selectedCarId: car.id,
+            socialLinks: u.socialLinks
+        )
+        do {
+            user = try await APIService.shared.updateProfile(request: request)
+            displayedCarId = car.id
+            displayedCarImageURL = car.imageURL
+            saveDisplayedCar()
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    private func saveDisplayedCar() {
+        UserDefaults.standard.set(displayedCarId, forKey: Self.displayedCarIdKey)
+        UserDefaults.standard.set(displayedCarImageURL, forKey: Self.displayedCarImageURLKey)
+    }
+
     /// Очистить данные (выход)
     func clear() {
         user = nil
         isEditing = false
+        displayedCarId = nil
+        displayedCarImageURL = nil
+        UserDefaults.standard.removeObject(forKey: Self.displayedCarIdKey)
+        UserDefaults.standard.removeObject(forKey: Self.displayedCarImageURLKey)
     }
     
     /// Сбросить ошибку (выход с экрана ошибки)
@@ -158,5 +223,5 @@ class ProfileViewModel: ObservableObject {
 }
 
 enum SocialLinkType {
-    case telegram, whatsapp, instagram, vk, phone, email
+    case telegram, vk, phone, email
 }

@@ -11,14 +11,14 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var viewModel: ServicesViewModel
     @EnvironmentObject var appRouter: AppRouter
+    @ObservedObject private var styleManager = AppStyleManager.shared
     @StateObject private var networkMonitor = NetworkMonitor.shared
     @State private var selectedService: Service?
     
     var body: some View {
         NavigationStack {
             ZStack {
-                // Системный фон (адаптируется к теме)
-                AppTheme.background
+                styleManager.screenGradient(base: AppTheme.background)
                     .ignoresSafeArea()
                 
                 content
@@ -33,7 +33,9 @@ struct HomeView: View {
             }
             .navigationTitle("Услуги")
             .navigationBarTitleDisplayMode(.large)
-            .refreshable { await viewModel.refresh() }
+            .refreshable {
+                await viewModel.loadServices(silentRefresh: true)
+            }
             .onAppear { Task { await viewModel.loadServices() } }
             .sheet(item: $selectedService) { service in
                 ServiceDetailView(service: service)
@@ -81,7 +83,7 @@ struct HomeView: View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
                 .font(.body)
-                .foregroundStyle(AppTheme.secondaryLabel)
+                .foregroundStyle(AppTheme.accent)
             
             TextField("Поиск услуг", text: $viewModel.searchText)
                 .textFieldStyle(.plain)
@@ -98,8 +100,19 @@ struct HomeView: View {
             }
         }
         .padding(12)
-        .background(AppTheme.tertiaryBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            AppTheme.tertiaryBackground,
+                            styleManager.accentPreset.gradientColors[0].opacity(styleManager.gradientStyle.opacity * 0.3)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        )
     }
     
     private var categoriesSection: some View {
@@ -171,7 +184,7 @@ struct CategoryChip: View {
                 .fontWeight(isSelected ? .semibold : .regular)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(isSelected ? Color.accentColor : AppTheme.tertiaryBackground)
+                .background(isSelected ? AppTheme.accent : AppTheme.tertiaryBackground)
                 .foregroundStyle(isSelected ? .white : AppTheme.label)
                 .clipShape(Capsule())
         }
@@ -179,65 +192,123 @@ struct CategoryChip: View {
     }
 }
 
-// MARK: - Service Card
+// MARK: - Service Card (фото слева на всю высоту, плавный градиент)
 
 struct ServiceCard: View {
     let service: Service
     
+    private let imageWidth: CGFloat = 110
+    private let cardMinHeight: CGFloat = 100
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(service.name)
-                        .font(.headline)
-                        .foregroundStyle(AppTheme.label)
-                    
-                    Text(service.category)
-                        .font(.caption)
-                        .foregroundStyle(AppTheme.secondaryLabel)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(AppTheme.tertiaryBackground)
-                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                }
+        HStack(spacing: 0) {
+            // Фото услуги слева на всю высоту плашки + плавный градиент
+            ZStack(alignment: .trailing) {
+                serviceImage
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .clipped()
                 
-                Spacer()
-                
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text(service.formattedPrice)
-                        .font(.headline)
-                        .foregroundStyle(Color.accentColor)
-                    
-                    HStack(spacing: 4) {
-                        Image(systemName: "clock")
-                            .font(.caption2)
-                        Text(service.formattedDuration)
+                // Плавный градиент справа налево (от прозрачного к затемнению)
+                LinearGradient(
+                    colors: [
+                        Color.clear,
+                        Color.black.opacity(0.12),
+                        Color.black.opacity(0.4)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            }
+            .frame(width: imageWidth)
+            .frame(maxHeight: .infinity)
+            
+            // Контент справа
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(service.name)
+                            .font(.headline)
+                            .foregroundStyle(AppTheme.label)
+                            .lineLimit(2)
+                        
+                        Text(service.category)
                             .font(.caption)
+                            .foregroundStyle(AppTheme.secondaryLabel)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 3)
+                            .background(AppTheme.tertiaryBackground)
+                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                     }
+                    Spacer()
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(service.formattedPrice)
+                            .font(.headline)
+                            .foregroundStyle(AppTheme.accent)
+                        HStack(spacing: 2) {
+                            Image(systemName: "clock")
+                                .font(.caption2)
+                            Text(service.formattedDuration)
+                                .font(.caption)
+                        }
+                        .foregroundStyle(AppTheme.secondaryLabel)
+                    }
+                }
+                
+                Text(service.description)
+                    .font(.caption)
                     .foregroundStyle(AppTheme.secondaryLabel)
+                    .lineLimit(2)
+                
+                HStack {
+                    Spacer()
+                    Text("Записаться")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(AppTheme.accent)
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.accentColor)
                 }
             }
-            
-            Text(service.description)
-                .font(.subheadline)
-                .foregroundStyle(AppTheme.secondaryLabel)
-                .lineLimit(2)
-            
-            HStack {
-                Spacer()
-                Text("Записаться")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Color.accentColor)
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.accentColor)
-            }
+            .padding(14)
         }
-        .padding()
+        .frame(minHeight: cardMinHeight)
         .background(AppTheme.secondaryBackground)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius, style: .continuous))
+    }
+    
+    @ViewBuilder
+    private var serviceImage: some View {
+        if let urlString = service.imageURL, let url = URL(string: urlString) {
+            AsyncImage(url: url) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                case .success(let loadedImage):
+                    loadedImage
+                        .resizable()
+                        .scaledToFill()
+                case .failure:
+                    imagePlaceholder
+                @unknown default:
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+        } else {
+            imagePlaceholder
+        }
+    }
+    
+    private var imagePlaceholder: some View {
+        Color(.tertiarySystemFill)
+            .overlay(
+                Image(systemName: "photo")
+                    .font(.title2)
+                    .foregroundStyle(Color(.tertiaryLabel))
+            )
     }
 }
 

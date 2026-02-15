@@ -11,15 +11,21 @@ import SwiftUI
 struct BookingsView: View {
     @EnvironmentObject var viewModel: BookingsViewModel
     @EnvironmentObject var appRouter: AppRouter
+    @EnvironmentObject var activityManager: ServiceExecutionActivityManager
+    @ObservedObject private var styleManager = AppStyleManager.shared
     @StateObject private var networkMonitor = NetworkMonitor.shared
     @State private var selectedSegment = 0
     @State private var showCancelAlert = false
     @State private var bookingToCancel: Booking?
+    @State private var selectedBooking: Booking?
+    @State private var actPDFItem: ActPDFItem?
+    @State private var actError: String?
+    @State private var actLoadingBookingId: String?
     
     var body: some View {
         NavigationStack {
             ZStack {
-                AppTheme.background
+                styleManager.screenGradient(base: AppTheme.background)
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
@@ -37,7 +43,14 @@ struct BookingsView: View {
             }
             .navigationTitle("Мои записи")
             .navigationBarTitleDisplayMode(.large)
-            .refreshable { await viewModel.loadBookings() }
+            .refreshable {
+                await viewModel.loadBookings(silentRefresh: true)
+                if let b = viewModel.bookings.first(where: { $0.status == .inProgress }),
+                   activityManager.currentActivity?.attributes.bookingId != b.id {
+                    let startTime = b.inProgressStartedAt ?? b.dateTime
+                    await activityManager.startActivity(for: b, startTime: startTime)
+                }
+            }
             .onAppear { Task { await viewModel.loadBookings() } }
             .alert("Отменить запись?", isPresented: $showCancelAlert, presenting: bookingToCancel) { booking in
                 Button("Отменить запись", role: .destructive) {
@@ -46,6 +59,46 @@ struct BookingsView: View {
                 Button("Назад", role: .cancel) {}
             } message: { booking in
                 Text("Вы уверены, что хотите отменить запись на \(booking.serviceName)?")
+            }
+            .fullScreenCover(item: $selectedBooking) { booking in
+                ServiceExecutionLiveActivityView(booking: booking)
+            }
+            .sheet(item: $actPDFItem) { item in
+                ActPDFView(url: item.url) {
+                    actPDFItem = nil
+                    try? FileManager.default.removeItem(at: item.url)
+                }
+            }
+            .alert("Ошибка загрузки акта", isPresented: .init(
+                get: { actError != nil },
+                set: { if !$0 { actError = nil } }
+            )) {
+                Button("OK") { actError = nil }
+            } message: {
+                Text(actError ?? "")
+            }
+        }
+    }
+    
+    private func openAct(for booking: Booking) {
+        guard booking.status == .completed else { return }
+        actLoadingBookingId = booking.id
+        actError = nil
+        Task {
+            do {
+                let data = try await APIService.shared.fetchBookingAct(bookingId: booking.id)
+                let temp = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("akt-\(booking.id).pdf")
+                try data.write(to: temp)
+                await MainActor.run {
+                    actPDFItem = ActPDFItem(url: temp)
+                    actLoadingBookingId = nil
+                }
+            } catch {
+                await MainActor.run {
+                    actError = error.localizedDescription
+                    actLoadingBookingId = nil
+                }
             }
         }
     }
@@ -79,9 +132,19 @@ struct BookingsView: View {
             ScrollView {
                 LazyVStack(spacing: 12) {
                     ForEach(currentBookings) { booking in
-                        BookingCard(booking: booking) {
-                            bookingToCancel = booking
-                            showCancelAlert = true
+                        BookingCard(
+                            booking: booking,
+                            onCancel: {
+                                bookingToCancel = booking
+                                showCancelAlert = true
+                            },
+                            onOpenAct: booking.status == .completed ? { openAct(for: booking) } : nil,
+                            actLoading: actLoadingBookingId == booking.id
+                        )
+                        .onTapGesture {
+                            if booking.status == .inProgress {
+                                selectedBooking = booking
+                            }
                         }
                     }
                 }
@@ -128,11 +191,18 @@ struct BookingsView: View {
     }
 }
 
+private struct ActPDFItem: Identifiable {
+    let id = UUID()
+    let url: URL
+}
+
 // MARK: - Booking Card
 
 struct BookingCard: View {
     let booking: Booking
     var onCancel: (() -> Void)?
+    var onOpenAct: (() -> Void)?
+    var actLoading: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -159,7 +229,29 @@ struct BookingCard: View {
                 
                 Spacer()
                 
-                if booking.canCancel, let onCancel = onCancel {
+                if booking.status == .inProgress {
+                    HStack(spacing: 6) {
+                        Image(systemName: "play.circle.fill")
+                            .font(.subheadline)
+                        Text("Смотреть процесс")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundStyle(Color.cyan)
+                } else if booking.status == .completed, let onOpenAct = onOpenAct {
+                    Button {
+                        onOpenAct()
+                    } label: {
+                        if actLoading {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        } else {
+                            Label("Акт", systemImage: "doc.text")
+                                .font(.subheadline)
+                        }
+                    }
+                    .disabled(actLoading)
+                } else if booking.canCancel, let onCancel = onCancel {
                     Button("Отменить") { onCancel() }
                         .font(.subheadline)
                         .foregroundStyle(AppTheme.destructive)
@@ -173,7 +265,26 @@ struct BookingCard: View {
             }
         }
         .padding()
-        .background(AppTheme.secondaryBackground)
+        .background(
+            booking.status == .inProgress
+                ? AnyView(
+                    LinearGradient(
+                        colors: [
+                            Color.cyan.opacity(0.1),
+                            Color.blue.opacity(0.05)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                : AnyView(AppTheme.secondaryBackground)
+        )
+        .overlay(
+            booking.status == .inProgress
+                ? RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius, style: .continuous)
+                    .stroke(Color.cyan.opacity(0.3), lineWidth: 1.5)
+                : nil
+        )
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius, style: .continuous))
     }
 }
@@ -219,4 +330,5 @@ struct StatusBadge: View {
     BookingsView()
         .environmentObject(BookingsViewModel())
         .environmentObject(AppRouter())
+        .environmentObject(ServiceExecutionActivityManager())
 }

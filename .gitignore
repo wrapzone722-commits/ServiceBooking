@@ -17,3 +17,7 @@ build/
 # Swift Package Manager
 .build/
 .swiftpm/
+
+# Web Console
+web-console/node_modules/
+web-console/data/

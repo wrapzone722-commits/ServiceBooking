@@ -48,20 +48,6 @@ struct QRScanOnboardingView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                     
-                    // Временная кнопка демо-входа (пока веб-консоль не готова)
-                    Button {
-                        scanError = nil
-                        useDemoMode()
-                    } label: {
-                        Label("Демо-вход", systemImage: "play.circle.fill")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.orange)
-                    .padding(.horizontal, 32)
-                    .padding(.top, 8)
                 }
                 
                 if isRegistering {
@@ -87,12 +73,24 @@ struct QRScanOnboardingView: View {
                         scanError = nil
                         showManualEntry = true
                     } label: {
-                        Label("Ввести URL вручную", systemImage: "link")
+                        Label("Ввести другой URL", systemImage: "link")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
                     }
                     .buttonStyle(.bordered)
+                    .padding(.horizontal, 32)
+                    Button {
+                        scanError = nil
+                        useDemoMode()
+                    } label: {
+                        Label("Демо-режим (без сервера)", systemImage: "play.circle.fill")
+                            .font(.subheadline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.orange)
                     .padding(.horizontal, 32)
                 } else {
                     Button {
@@ -143,7 +141,7 @@ struct QRScanOnboardingView: View {
         .sheet(isPresented: $showManualEntry) {
             NavigationStack {
                 VStack(spacing: 20) {
-                    TextField("https://api.example.com/v1", text: $manualURL)
+                    TextField("https://your-console.com/api/v1", text: $manualURL)
                         .textFieldStyle(.roundedBorder)
                         .keyboardType(.URL)
                         .autocapitalization(.none)
@@ -227,10 +225,11 @@ struct QRScanOnboardingView: View {
         }
     }
     
-    /// Демо-режим без API (для симулятора)
+    /// Демо-режим без API (локальные mock-данные)
     private func useDemoMode() {
         ConsoleConfigStorage.shared.save(baseURL: "https://api.demo.local/v1", token: nil)
         APIConfig.useMockData = true
         isCompleted = true
     }
+
 }

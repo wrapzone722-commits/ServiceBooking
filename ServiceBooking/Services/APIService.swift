@@ -40,19 +40,35 @@ enum APIError: Error, LocalizedError {
 
 /// Конфигурация API
 struct APIConfig {
-    /// URL по умолчанию (до сканирования QR)
-    static let defaultBaseURL = "https://api.your-service.com/v1"
+    /// URL по умолчанию (до сканирования QR). Должен заканчиваться на /api/v1.
+    static let defaultBaseURL = "https://api.your-service.com/api/v1"
     
     /// Текущий URL — из QR или default
     static var baseURL: String {
         ConsoleConfigStorage.shared.config?.baseURL ?? defaultBaseURL
     }
     
-    /// Таймаут запросов (секунды)
-    static let requestTimeout: TimeInterval = 30
+    /// Таймаут запросов (секунды); увеличен для работы через VPN
+    static let requestTimeout: TimeInterval = 60
     
-    /// Демо-режим — false после сканирования QR
-    static var useMockData: Bool = true
+    /// Ручной переопределение (nil = считать по конфигу)
+    private static var _useMockDataOverride: Bool?
+
+    /// Демо-режим: по умолчанию из конфига; можно переопределить из UI
+    static var useMockData: Bool {
+        get {
+            if let override = _useMockDataOverride { return override }
+            guard let config = ConsoleConfigStorage.shared.config else { return true }
+            let url = config.baseURL.trimmingCharacters(in: .whitespaces)
+            return url.isEmpty || url == defaultBaseURL
+        }
+        set { _useMockDataOverride = newValue }
+    }
+
+    /// Сбросить переопределение — снова использовать значение по конфигу
+    static func resetUseMockDataOverride() {
+        _useMockDataOverride = nil
+    }
 }
 
 /// Основной сервис для работы с API
@@ -72,11 +88,13 @@ class APIService {
         self.encoder = JSONEncoder()
         self.encoder.dateEncodingStrategy = .iso8601
         
-        // Конфигурация сессии без кэширования
+        // Конфигурация сессии: работа через VPN, ожидание подключения
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil // Отключаем кэш
+        config.urlCache = nil
         config.timeoutIntervalForRequest = APIConfig.requestTimeout
+        config.timeoutIntervalForResource = 120 // Ожидание при медленном/VPN-подключении
+        config.waitsForConnectivity = true // Не падать сразу; ждать появления сети (в т.ч. VPN)
         self.session = URLSession(configuration: config)
     }
     
@@ -146,7 +164,8 @@ class APIService {
                 price: service?.price ?? 0,
                 duration: service?.duration ?? 60,
                 notes: request.notes,
-                createdAt: Date()
+                createdAt: Date(),
+                inProgressStartedAt: nil
             )
         }
         return try await self.request(
@@ -156,6 +175,27 @@ class APIService {
         )
     }
     
+    /// Отправить рейтинг по записи (POST /bookings/:id/rating)
+    func submitRating(bookingId: String, rating: Int, comment: String? = nil) async throws {
+        if APIConfig.useMockData {
+            try await Task.sleep(nanoseconds: 200_000_000)
+            return
+        }
+        struct RatingRequest: Encodable {
+            let rating: Int
+            let comment: String?
+        }
+        struct RatingResponse: Decodable {
+            let rating: Int
+            let rating_comment: String?
+        }
+        let _: RatingResponse = try await request(
+            endpoint: "/bookings/\(bookingId)/rating",
+            method: "POST",
+            body: RatingRequest(rating: rating, comment: comment)
+        )
+    }
+
     /// Отменить запись
     func cancelBooking(id: String) async throws {
         if APIConfig.useMockData {
@@ -166,6 +206,14 @@ class APIService {
             endpoint: "/bookings/\(id)",
             method: "DELETE"
         )
+    }
+    
+    /// Скачать PDF «Акт выполненных работ» для завершённой записи (GET .../bookings/:id/act)
+    func fetchBookingAct(bookingId: String) async throws -> Data {
+        if APIConfig.useMockData {
+            throw APIError.serverError(404, "Акт доступен только при подключении к серверу")
+        }
+        return try await requestRaw(endpoint: "/bookings/\(bookingId)/act", method: "GET")
     }
     
     // MARK: - Time Slots API
@@ -202,8 +250,26 @@ class APIService {
         return try await request(endpoint: "/posts", method: "GET")
     }
     
+    /// Получить список папок автомобилей (типы авто из веб-консоли) — GET /api/v1/cars/folders
+    func fetchCars() async throws -> [Car] {
+        if APIConfig.useMockData {
+            try await Task.sleep(nanoseconds: 150_000_000)
+            return DemoData.cars
+        }
+        let folders: [CarFolderResponse] = try await request(endpoint: "/cars/folders", method: "GET")
+        return folders.map { folder in
+            let items = folder.images.map { CarImageItem(name: $0.name, url: $0.url) }
+            return Car(
+                id: folder.id,
+                name: folder.name,
+                imageURL: folder.profilePreviewURL ?? folder.images.first?.url,
+                images: items
+            )
+        }
+    }
+
     // MARK: - Profile API
-    
+
     /// Получить профиль (всегда с сервера)
     func fetchProfile() async throws -> User {
         if APIConfig.useMockData {
@@ -217,11 +283,16 @@ class APIService {
     func updateProfile(request: UpdateProfileRequest) async throws -> User {
         if APIConfig.useMockData {
             try await Task.sleep(nanoseconds: 300_000_000)
-            // В демо возвращаем обновленный профиль
             var user = DemoData.user
             if let firstName = request.firstName { user.firstName = firstName }
             if let lastName = request.lastName { user.lastName = lastName }
             if let email = request.email { user.email = email }
+            if let carId = request.selectedCarId {
+                user.selectedCarId = carId
+                if let car = DemoData.cars.first(where: { $0.id == carId }), let url = car.imageURL {
+                    user.avatarURL = url
+                }
+            }
             return user
         }
         return try await self.request(
@@ -231,7 +302,53 @@ class APIService {
         )
     }
     
+    // MARK: - Уведомления (сообщения от веб-консоли: сервисные и от администратора)
+    
+    /// Получить список уведомлений/сообщений для текущего клиента
+    func fetchNotifications() async throws -> [ServiceChatMessage] {
+        if APIConfig.useMockData {
+            try await Task.sleep(nanoseconds: 250_000_000)
+            return DemoData.notifications
+        }
+        let list: [APINotificationItem] = try await request(endpoint: "/notifications", method: "GET")
+        return list.map { $0.toMessage() }
+    }
+    
+    /// Отметить уведомление как прочитанное (опционально, для веб-консоли)
+    func markNotificationRead(id: String) async throws {
+        if APIConfig.useMockData { return }
+        let _: EmptyResponse = try await request(
+            endpoint: "/notifications/\(id)/read",
+            method: "PATCH"
+        )
+    }
+    
     // MARK: - Private Methods
+    
+    /// Запрос, возвращающий сырые данные (для PDF и т.п.)
+    private func requestRaw(endpoint: String, method: String) async throws -> Data {
+        guard let url = URL(string: APIConfig.baseURL + endpoint) else {
+            throw APIError.invalidURL
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        let token = authToken ?? KeychainStorage.apiKey
+        if let token = token, !token.isEmpty {
+            request.setValue(token, forHTTPHeaderField: "X-API-Key")
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        let (data, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.networkError(NSError(domain: "", code: -1))
+        }
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let message = Self.parseServerErrorMessage(data: data)
+            throw APIError.serverError(httpResponse.statusCode, message)
+        }
+        return data
+    }
     
     /// Выполнить запрос к API (без кэширования)
     private func request<T: Decodable>(
@@ -239,11 +356,8 @@ class APIService {
         method: String,
         body: (any Encodable)? = nil
     ) async throws -> T {
-        // Проверка подключения
-        guard NetworkMonitor.shared.isConnected else {
-            throw APIError.noConnection
-        }
-        
+        // Не блокируем запрос по NWPathMonitor — при VPN он может давать ложный «нет сети».
+        // URLSession с waitsForConnectivity сам дождётся подключения или вернёт ошибку по таймауту.
         guard let url = URL(string: APIConfig.baseURL + endpoint) else {
             throw APIError.invalidURL
         }
@@ -254,9 +368,10 @@ class APIService {
         request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
         request.cachePolicy = .reloadIgnoringLocalCacheData
         
-        // Авторизация (токен из памяти или Keychain)
+        // Авторизация: X-API-Key (консоль) и Bearer для совместимости
         let token = authToken ?? KeychainStorage.apiKey
         if let token = token, !token.isEmpty {
+            request.setValue(token, forHTTPHeaderField: "X-API-Key")
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
@@ -281,9 +396,18 @@ class APIService {
         case 401:
             throw APIError.unauthorized
         default:
-            let errorMessage = String(data: data, encoding: .utf8)
-            throw APIError.serverError(httpResponse.statusCode, errorMessage)
+            let message = Self.parseServerErrorMessage(data: data)
+            throw APIError.serverError(httpResponse.statusCode, message)
         }
+    }
+    
+    /// Извлечь сообщение об ошибке из JSON ответа сервера (поле "message" или "error")
+    private static func parseServerErrorMessage(data: Data) -> String? {
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let msg = json["message"] as? String ?? json["error"] as? String {
+            return msg
+        }
+        return String(data: data, encoding: .utf8)
     }
     
     /// Демо слоты для тестирования UI

@@ -7,9 +7,22 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
-		<!-- Разрешить HTTP для локальной сети (192.168.x.x, 10.x.x.x) при разработке -->
+		<!-- Разрешить HTTP для локальной сети и localhost (веб-консоль при разработке) -->
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>127.0.0.1</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
 	
 	<!-- Описания разрешений (Privacy - Required by Apple) -->
@@ -84,6 +97,12 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleDefault</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	
+	<!-- Live Activities (Dynamic Island) -->
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>NSSupportsLiveActivitiesFrequentUpdates</key>
 	<true/>
 </dict>
 </plist>

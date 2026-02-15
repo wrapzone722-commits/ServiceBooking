@@ -7,39 +7,84 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		001 /* ServiceBookingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101; };
-		002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102; };
-		003 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103; };
-		004 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104; };
-		005 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105; };
-		006 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106; };
-		007 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107; };
-		008 /* ServicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108; };
-		009 /* BookingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109; };
-		010 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110; };
-		011 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111; };
-		012 /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112; };
-		013 /* BookingCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113; };
-		014 /* BookingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114; };
-		015 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115; };
-		016 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 116; };
-		017 /* NetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117; };
-		018 /* AccessibilityModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118; };
-		023 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124; };
-		019 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 119; };
-		022 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123; };
-		020 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 120; };
-		021 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 121; };
-		024 /* ConsoleConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125; };
-		025 /* QRCodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126; };
-		026 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127; };
-		027 /* QRScanOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128; };
-		028 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129; };
-		029 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130; };
-		030 /* ClientRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131; };
-		031 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132; };
-		032 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133; };
+		001 /* ServiceBookingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101 /* ServiceBookingApp.swift */; };
+		002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102 /* ContentView.swift */; };
+		003 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103 /* Service.swift */; };
+		004 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104 /* Booking.swift */; };
+		005 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105 /* User.swift */; };
+		033 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149 /* Car.swift */; };
+		006 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106 /* APIService.swift */; };
+		007 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107 /* NetworkMonitor.swift */; };
+		008 /* ServicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108 /* ServicesViewModel.swift */; };
+		009 /* BookingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109 /* BookingsViewModel.swift */; };
+		010 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110 /* ProfileViewModel.swift */; };
+		011 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111 /* HomeView.swift */; };
+		012 /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112 /* ServiceDetailView.swift */; };
+		013 /* BookingCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113 /* BookingCreationView.swift */; };
+		014 /* BookingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114 /* BookingsView.swift */; };
+		015 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115 /* ProfileView.swift */; };
+		016 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 116 /* Assets.xcassets */; };
+		017 /* NetworkStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117 /* NetworkStatusView.swift */; };
+		018 /* AccessibilityModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118 /* AccessibilityModifiers.swift */; };
+		019 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 119 /* LaunchScreen.storyboard */; };
+		020 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 120 /* Localizable.xcstrings */; };
+		021 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 121 /* PrivacyInfo.xcprivacy */; };
+		022 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123 /* SplashView.swift */; };
+		023 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124 /* AppTheme.swift */; };
+		024 /* ConsoleConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125 /* ConsoleConfig.swift */; };
+		025 /* QRCodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126 /* QRCodeParser.swift */; };
+		026 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127 /* QRScannerView.swift */; };
+		027 /* QRScanOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128 /* QRScanOnboardingView.swift */; };
+		028 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129 /* DemoData.swift */; };
+		029 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130 /* AppRouter.swift */; };
+		030 /* ClientRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131 /* ClientRegistry.swift */; };
+		031 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132 /* KeychainStorage.swift */; };
+		032 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133 /* Post.swift */; };
+		034 /* ServiceChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134 /* ServiceChatMessage.swift */; };
+		035 /* ServiceChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135 /* ServiceChatView.swift */; };
+		036 /* ProfileSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136 /* ProfileSettings.swift */; };
+		037 /* HelpFAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137 /* HelpFAQView.swift */; };
+		038 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138 /* PrivacyPolicyView.swift */; };
+		039 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139 /* TermsOfUseView.swift */; };
+		040 /* MyContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140 /* MyContactsView.swift */; };
+		041 /* LoyaltySystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141 /* LoyaltySystemView.swift */; };
+		042 /* ServiceExecutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142 /* ServiceExecutionView.swift */; };
+		043 /* ServiceExecutionActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143 /* ServiceExecutionActivity.swift */; };
+		044 /* ServiceExecutionLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144 /* ServiceExecutionLiveActivityView.swift */; };
+		045 /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145 /* MessagesViewModel.swift */; };
+		046 /* AppStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 146 /* AppStyle.swift */; };
+		047 /* AppStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147 /* AppStyleManager.swift */; };
+		048 /* ThemeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148 /* ThemeSettingsView.swift */; };
+		049 /* ActPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150 /* ActPDFView.swift */; };
+		W01 /* ServiceBookingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = W11 /* ServiceBookingWidgetBundle.swift */; };
+		W02 /* ServiceExecutionLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = W12 /* ServiceExecutionLiveActivity.swift */; };
+		W03 /* ServiceExecutionAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = W13 /* ServiceExecutionAttributes.swift */; };
+		W04 /* ServiceBookingWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = W10 /* ServiceBookingWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		W20 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 600 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = W30;
+			remoteInfo = ServiceBookingWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		W21 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				W04 /* ServiceBookingWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		100 /* ServiceBooking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiceBooking.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +93,7 @@
 		103 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		104 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
 		105 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		149 /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		106 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		107 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		108 /* ServicesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewModel.swift; sourceTree = "<group>"; };
@@ -76,10 +122,38 @@
 		131 /* ClientRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientRegistry.swift; sourceTree = "<group>"; };
 		132 /* KeychainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
 		133 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		134 /* ServiceChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceChatMessage.swift; sourceTree = "<group>"; };
+		135 /* ServiceChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceChatView.swift; sourceTree = "<group>"; };
+		136 /* ProfileSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettings.swift; sourceTree = "<group>"; };
+		137 /* HelpFAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpFAQView.swift; sourceTree = "<group>"; };
+		138 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		139 /* TermsOfUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
+		140 /* MyContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContactsView.swift; sourceTree = "<group>"; };
+		141 /* LoyaltySystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoyaltySystemView.swift; sourceTree = "<group>"; };
+		142 /* ServiceExecutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionView.swift; sourceTree = "<group>"; };
+		143 /* ServiceExecutionActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionActivity.swift; sourceTree = "<group>"; };
+		144 /* ServiceExecutionLiveActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionLiveActivityView.swift; sourceTree = "<group>"; };
+		145 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
+		146 /* AppStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStyle.swift; sourceTree = "<group>"; };
+		147 /* AppStyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStyleManager.swift; sourceTree = "<group>"; };
+		148 /* ThemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsView.swift; sourceTree = "<group>"; };
+		150 /* ActPDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActPDFView.swift; sourceTree = "<group>"; };
+		W10 /* ServiceBookingWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ServiceBookingWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		W11 /* ServiceBookingWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBookingWidgetBundle.swift; sourceTree = "<group>"; };
+		W12 /* ServiceExecutionLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionLiveActivity.swift; sourceTree = "<group>"; };
+		W13 /* ServiceExecutionAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionAttributes.swift; sourceTree = "<group>"; };
+		W14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		200 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W31 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -93,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				301 /* ServiceBooking */,
+				W15 /* ServiceBookingWidget */,
 				302 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				100 /* ServiceBooking.app */,
+				W10 /* ServiceBookingWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,9 +202,14 @@
 			children = (
 				103 /* Service.swift */,
 				104 /* Booking.swift */,
+				149 /* Car.swift */,
 				105 /* User.swift */,
 				133 /* Post.swift */,
 				129 /* DemoData.swift */,
+				134 /* ServiceChatMessage.swift */,
+				136 /* ProfileSettings.swift */,
+				143 /* ServiceExecutionActivity.swift */,
+				146 /* AppStyle.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -143,6 +224,7 @@
 				130 /* AppRouter.swift */,
 				131 /* ClientRegistry.swift */,
 				132 /* KeychainStorage.swift */,
+				147 /* AppStyleManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -153,6 +235,7 @@
 				108 /* ServicesViewModel.swift */,
 				109 /* BookingsViewModel.swift */,
 				110 /* ProfileViewModel.swift */,
+				145 /* MessagesViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -192,6 +275,9 @@
 			isa = PBXGroup;
 			children = (
 				114 /* BookingsView.swift */,
+				150 /* ActPDFView.swift */,
+				142 /* ServiceExecutionView.swift */,
+				144 /* ServiceExecutionLiveActivityView.swift */,
 			);
 			path = Bookings;
 			sourceTree = "<group>";
@@ -200,6 +286,13 @@
 			isa = PBXGroup;
 			children = (
 				115 /* ProfileView.swift */,
+				135 /* ServiceChatView.swift */,
+				137 /* HelpFAQView.swift */,
+				138 /* PrivacyPolicyView.swift */,
+				139 /* TermsOfUseView.swift */,
+				140 /* MyContactsView.swift */,
+				141 /* LoyaltySystemView.swift */,
+				148 /* ThemeSettingsView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -217,25 +310,54 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		W15 /* ServiceBookingWidget */ = {
+			isa = PBXGroup;
+			children = (
+				W11 /* ServiceBookingWidgetBundle.swift */,
+				W12 /* ServiceExecutionLiveActivity.swift */,
+				W13 /* ServiceExecutionAttributes.swift */,
+				W14 /* Info.plist */,
+			);
+			path = ServiceBookingWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		400 /* ServiceBooking */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 500;
+			buildConfigurationList = 500 /* Build configuration list for PBXNativeTarget "ServiceBooking" */;
 			buildPhases = (
 				401 /* Sources */,
 				200 /* Frameworks */,
 				402 /* Resources */,
+				W21 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				W22 /* PBXTargetDependency */,
 			);
 			name = ServiceBooking;
 			productName = ServiceBooking;
 			productReference = 100 /* ServiceBooking.app */;
 			productType = "com.apple.product-type.application";
+		};
+		W30 /* ServiceBookingWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = W50 /* Build configuration list for PBXNativeTarget "ServiceBookingWidget" */;
+			buildPhases = (
+				W32 /* Sources */,
+				W31 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ServiceBookingWidget;
+			productName = ServiceBookingWidget;
+			productReference = W10 /* ServiceBookingWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -250,9 +372,12 @@
 					400 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					W30 = {
+						CreatedOnToolsVersion = 15.0;
+					};
 				};
 			};
-			buildConfigurationList = 601;
+			buildConfigurationList = 601 /* Build configuration list for PBXProject "ServiceBooking" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = ru;
 			hasScannedForEncodings = 0;
@@ -267,6 +392,7 @@
 			projectRoot = "";
 			targets = (
 				400 /* ServiceBooking */,
+				W30 /* ServiceBookingWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -294,6 +420,7 @@
 				002 /* ContentView.swift in Sources */,
 				003 /* Service.swift in Sources */,
 				004 /* Booking.swift in Sources */,
+				033 /* Car.swift in Sources */,
 				005 /* User.swift in Sources */,
 				006 /* APIService.swift in Sources */,
 				007 /* NetworkMonitor.swift in Sources */,
@@ -318,10 +445,44 @@
 				030 /* ClientRegistry.swift in Sources */,
 				031 /* KeychainStorage.swift in Sources */,
 				032 /* Post.swift in Sources */,
+				034 /* ServiceChatMessage.swift in Sources */,
+				035 /* ServiceChatView.swift in Sources */,
+				036 /* ProfileSettings.swift in Sources */,
+				037 /* HelpFAQView.swift in Sources */,
+				038 /* PrivacyPolicyView.swift in Sources */,
+				039 /* TermsOfUseView.swift in Sources */,
+				040 /* MyContactsView.swift in Sources */,
+				041 /* LoyaltySystemView.swift in Sources */,
+				042 /* ServiceExecutionView.swift in Sources */,
+				043 /* ServiceExecutionActivity.swift in Sources */,
+				044 /* ServiceExecutionLiveActivityView.swift in Sources */,
+				045 /* MessagesViewModel.swift in Sources */,
+				046 /* AppStyle.swift in Sources */,
+				047 /* AppStyleManager.swift in Sources */,
+				048 /* ThemeSettingsView.swift in Sources */,
+				049 /* ActPDFView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W32 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W01 /* ServiceBookingWidgetBundle.swift in Sources */,
+				W02 /* ServiceExecutionLiveActivity.swift in Sources */,
+				W03 /* ServiceExecutionAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		W22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = W30 /* ServiceBookingWidget */;
+			targetProxy = W20 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		700 /* Debug */ = {
@@ -449,9 +610,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M7434XB3SP;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = M7434XB3SP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiceBooking/Info.plist;
@@ -483,9 +644,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M7434XB3SP;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = M7434XB3SP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiceBooking/Info.plist;
@@ -511,6 +672,60 @@
 			};
 			name = Release;
 		};
+		W51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M7434XB3SP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ServiceBookingWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "ServiceBooking Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.servicebooking.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		W52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M7434XB3SP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ServiceBookingWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "ServiceBooking Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.servicebooking.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -528,6 +743,15 @@
 			buildConfigurations = (
 				700 /* Debug */,
 				701 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		W50 /* Build configuration list for PBXNativeTarget "ServiceBookingWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				W51 /* Debug */,
+				W52 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

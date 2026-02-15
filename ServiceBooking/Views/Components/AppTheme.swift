@@ -51,15 +51,26 @@ enum AppTheme {
         Color(.tertiaryLabel)
     }
     
-    // MARK: - Accent (системный акцент)
+    // MARK: - Accent (из настроек оформления, доступен из любого контекста)
     
     static var accent: Color {
-        Color.accentColor
+        let preset = AccentPreset(rawValue: UserDefaults.standard.string(forKey: AppStyleKeys.accentPreset) ?? "") ?? .blue
+        return preset.color
     }
     
     /// Акцент на светлом фоне (для тёмной темы)
     static var accentTinted: Color {
-        Color.accentColor.opacity(0.15)
+        accent.opacity(0.15)
+    }
+
+    /// Пресет акцента (из UserDefaults, для использования вне MainActor)
+    static var accentPreset: AccentPreset {
+        AccentPreset(rawValue: UserDefaults.standard.string(forKey: AppStyleKeys.accentPreset) ?? "") ?? .blue
+    }
+
+    /// Интенсивность градиентов (из UserDefaults)
+    static var gradientStyle: GradientStyle {
+        GradientStyle(rawValue: UserDefaults.standard.string(forKey: AppStyleKeys.gradientStyle) ?? "") ?? .subtle
     }
     
     // MARK: - Semantic Colors (адаптивные)

@@ -45,22 +45,41 @@ class BookingsViewModel: ObservableObject {
             .sorted { $0.dateTime > $1.dateTime }
     }
     
+    /// Доступные слоты для выбора: только свободные и только будущее время (прошедшие не показываем)
     var availableSlotsForSelection: [TimeSlot] {
-        availableSlots.filter { $0.isAvailable }
+        let now = Date()
+        return availableSlots.filter { $0.isAvailable && $0.time >= now }
     }
     
     // MARK: - API Methods
     
     /// Загрузить записи с сервера
-    func loadBookings() async {
+    func loadBookings(silentRefresh: Bool = false) async {
         isLoading = true
-        errorMessage = nil
+        if !silentRefresh {
+            errorMessage = nil
+        }
         
         do {
             bookings = try await APIService.shared.fetchBookings()
+            if silentRefresh {
+                errorMessage = nil // Очищаем ошибку только при успехе
+            }
         } catch {
-            errorMessage = error.localizedDescription
-            bookings = []
+            // При silent refresh не показываем ошибку сразу, даём больше времени
+            if !silentRefresh {
+                errorMessage = error.localizedDescription
+                bookings = []
+            } else {
+                // При pull-to-refresh показываем ошибку только если данных нет совсем
+                if bookings.isEmpty {
+                    // Задержка перед показом ошибки при refresh
+                    try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 секунды
+                    if bookings.isEmpty {
+                        errorMessage = error.localizedDescription
+                    }
+                }
+            }
         }
         
         isLoading = false
