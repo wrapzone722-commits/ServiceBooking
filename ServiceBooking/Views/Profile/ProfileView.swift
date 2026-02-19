@@ -89,6 +89,29 @@ struct ProfileView: View {
         }
     }
     
+    private func performLogout() {
+        // Сначала закрываем все модалки/алерты, затем уходим на QR-скан на следующем цикле.
+        showLogoutConfirm = false
+        showCarPicker = false
+        showServiceChat = false
+        showHelpFAQ = false
+        showPrivacyPolicy = false
+        showTermsOfUse = false
+        showMyContacts = false
+        showLoyaltySystem = false
+        showThemeSettings = false
+        showLegalConsent = false
+        showRevokeLegalConfirm = false
+        
+        if viewModel.isEditing {
+            viewModel.cancelEditing()
+        }
+        
+        DispatchQueue.main.async {
+            appRouter.returnToQRScan()
+        }
+    }
+    
     @ViewBuilder
     private var content: some View {
         if viewModel.isLoading && viewModel.user == nil {
@@ -393,7 +416,7 @@ struct ProfileView: View {
         .alert("Выйти из аккаунта?", isPresented: $showLogoutConfirm) {
             Button("Отмена", role: .cancel) {}
             Button("Выйти", role: .destructive) {
-                appRouter.returnToQRScan()
+                performLogout()
             }
         } message: {
             Text("Вам потребуется снова отсканировать QR-код для входа.")
@@ -662,7 +685,7 @@ struct ProfileView: View {
             }
             
             Button {
-                appRouter.returnToQRScan()
+                performLogout()
             } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "qrcode.viewfinder")
