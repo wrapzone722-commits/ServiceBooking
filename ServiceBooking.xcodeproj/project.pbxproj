@@ -61,6 +61,7 @@
 		052 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153 /* NewsView.swift */; };
 		053 /* CompanyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154 /* CompanyInfo.swift */; };
 		054 /* CompanyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155 /* CompanyView.swift */; };
+		055 /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156 /* LegalInfoView.swift */; };
 		W01 /* ServiceBookingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = W11 /* ServiceBookingWidgetBundle.swift */; };
 		W02 /* ServiceExecutionLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = W12 /* ServiceExecutionLiveActivity.swift */; };
 		W03 /* ServiceExecutionAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = W13 /* ServiceExecutionAttributes.swift */; };
@@ -148,6 +149,7 @@
 		153 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
 		154 /* CompanyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyInfo.swift; sourceTree = "<group>"; };
 		155 /* CompanyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyView.swift; sourceTree = "<group>"; };
+		156 /* LegalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInfoView.swift; sourceTree = "<group>"; };
 		W10 /* ServiceBookingWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ServiceBookingWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		W11 /* ServiceBookingWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBookingWidgetBundle.swift; sourceTree = "<group>"; };
 		W12 /* ServiceExecutionLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionLiveActivity.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				137 /* HelpFAQView.swift */,
 				138 /* PrivacyPolicyView.swift */,
 				155 /* CompanyView.swift */,
+				156 /* LegalInfoView.swift */,
 				139 /* TermsOfUseView.swift */,
 				140 /* MyContactsView.swift */,
 				141 /* LoyaltySystemView.swift */,
@@ -489,6 +492,7 @@
 				052 /* NewsView.swift in Sources */,
 				053 /* CompanyInfo.swift in Sources */,
 				054 /* CompanyView.swift in Sources */,
+				055 /* LegalInfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

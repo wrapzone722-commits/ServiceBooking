@@ -16,10 +16,7 @@ struct ProfileView: View {
     @State private var showCarPicker = false
     @State private var showServiceChat = false
     @State private var showHelpFAQ = false
-    @State private var showPrivacyPolicy = false
-    @State private var showTermsOfUse = false
-    @State private var showLegalConsent = false
-    @State private var showRevokeLegalConfirm = false
+    @State private var showLegalInfo = false
     @AppStorage("profile_fill_hint_shown") private var profileFillHintShown = false
     @State private var showLogoutConfirm = false
     @State private var showMyContacts = false
@@ -29,11 +26,6 @@ struct ProfileView: View {
     
     @ObservedObject private var styleManager = AppStyleManager.shared
     @AppStorage(ProfileSettingsKeys.pushEnabled) private var pushNotificationsEnabled = true
-    
-    private let requiredLegalVersion = "2026-02-15"
-    @AppStorage("sb_ios_legal_version") private var legalVersion: String = ""
-    @AppStorage("sb_ios_legal_accepted_at") private var legalAcceptedAt: String = ""
-    private var legalAccepted: Bool { legalVersion == requiredLegalVersion && !legalAcceptedAt.isEmpty }
     
     @Environment(\.scenePhase) private var scenePhase
     @State private var pendingPasteFromMessenger: PendingMessenger?
@@ -96,13 +88,10 @@ struct ProfileView: View {
         showCarPicker = false
         showServiceChat = false
         showHelpFAQ = false
-        showPrivacyPolicy = false
-        showTermsOfUse = false
         showMyContacts = false
         showLoyaltySystem = false
         showThemeSettings = false
-        showLegalConsent = false
-        showRevokeLegalConfirm = false
+        showLegalInfo = false
         
         if viewModel.isEditing {
             viewModel.cancelEditing()
@@ -479,16 +468,7 @@ struct ProfileView: View {
                 VStack(spacing: 12) {
                     modernActionButton(icon: "questionmark.circle.fill", title: "Помощь / FAQ", color: .blue) { showHelpFAQ = true }
                     modernActionButton(icon: "building.2.fill", title: "О компании", color: .indigo) { showCompany = true }
-                    modernActionButton(
-                        icon: legalAccepted ? "checkmark.shield.fill" : "exclamationmark.shield.fill",
-                        title: legalAccepted ? "Согласие на ПДн: принято" : "Согласие на ПДн: не принято",
-                        color: legalAccepted ? .green : .orange
-                    ) { showLegalConsent = true }
-                    if legalAccepted {
-                        modernActionButton(icon: "xmark.shield.fill", title: "Отозвать согласие", color: .red) { showRevokeLegalConfirm = true }
-                    }
-                    modernActionButton(icon: "hand.raised.fill", title: "Политика конфиденциальности", color: .gray) { showPrivacyPolicy = true }
-                    modernActionButton(icon: "doc.text.fill", title: "Условия использования", color: .gray) { showTermsOfUse = true }
+                    modernActionButton(icon: "doc.text.magnifyingglass", title: "Юридическая информация", color: .gray) { showLegalInfo = true }
                 }
                 
                 HStack {
@@ -512,19 +492,10 @@ struct ProfileView: View {
         .shadow(color: Color.black.opacity(0.08), radius: 16, x: 0, y: 6)
         .sheet(isPresented: $showHelpFAQ) { HelpFAQView() }
         .sheet(isPresented: $showCompany) { CompanyView() }
-        .sheet(isPresented: $showLegalConsent) { LegalConsentView(requiredVersion: requiredLegalVersion, allowDismiss: true) }
-        .sheet(isPresented: $showPrivacyPolicy) { PrivacyPolicyView() }
-        .sheet(isPresented: $showTermsOfUse) { TermsOfUseView() }
+        .sheet(isPresented: $showLegalInfo) { LegalInfoView() }
         .sheet(isPresented: $showMyContacts) { MyContactsView() }
         .sheet(isPresented: $showLoyaltySystem) { LoyaltySystemView(user: viewModel.user) }
         .sheet(isPresented: $showThemeSettings) { ThemeSettingsView() }
-        .confirmationDialog("Отозвать согласие на обработку ПДн?", isPresented: $showRevokeLegalConfirm, titleVisibility: .visible) {
-            Button("Отозвать", role: .destructive) {
-                legalVersion = ""
-                legalAcceptedAt = ""
-            }
-            Button("Отмена", role: .cancel) {}
-        }
     }
     
     private var appVersion: String {
