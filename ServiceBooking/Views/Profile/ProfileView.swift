@@ -25,6 +25,7 @@ struct ProfileView: View {
     @State private var showMyContacts = false
     @State private var showLoyaltySystem = false
     @State private var showThemeSettings = false
+    @State private var showCompany = false
     
     @ObservedObject private var styleManager = AppStyleManager.shared
     @AppStorage(ProfileSettingsKeys.pushEnabled) private var pushNotificationsEnabled = true
@@ -477,6 +478,7 @@ struct ProfileView: View {
                     .foregroundStyle(Color(.tertiaryLabel))
                 VStack(spacing: 12) {
                     modernActionButton(icon: "questionmark.circle.fill", title: "Помощь / FAQ", color: .blue) { showHelpFAQ = true }
+                    modernActionButton(icon: "building.2.fill", title: "О компании", color: .indigo) { showCompany = true }
                     modernActionButton(
                         icon: legalAccepted ? "checkmark.shield.fill" : "exclamationmark.shield.fill",
                         title: legalAccepted ? "Согласие на ПДн: принято" : "Согласие на ПДн: не принято",
@@ -509,6 +511,7 @@ struct ProfileView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 16, x: 0, y: 6)
         .sheet(isPresented: $showHelpFAQ) { HelpFAQView() }
+        .sheet(isPresented: $showCompany) { CompanyView() }
         .sheet(isPresented: $showLegalConsent) { LegalConsentView(requiredVersion: requiredLegalVersion, allowDismiss: true) }
         .sheet(isPresented: $showPrivacyPolicy) { PrivacyPolicyView() }
         .sheet(isPresented: $showTermsOfUse) { TermsOfUseView() }

@@ -80,6 +80,7 @@ struct LegalConsentView: View {
     @AppStorage("sb_ios_legal_accepted_at") private var legalAcceptedAt: String = ""
     
     private var accepted: Bool { legalVersion == requiredVersion && !legalAcceptedAt.isEmpty }
+    @State private var company: CompanyInfo?
     
     var body: some View {
         NavigationStack {
@@ -91,6 +92,12 @@ struct LegalConsentView: View {
                     Text("Для использования приложения нужно принять документы (152‑ФЗ/242‑ФЗ).")
                         .foregroundStyle(.secondary)
                     
+                    if let c = company {
+                        Text("Оператор: \(operatorLine(c))")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    
                     GroupBox {
                         VStack(alignment: .leading, spacing: 10) {
                             NavigationLink("Политика обработки ПДн") {
@@ -98,15 +105,15 @@ struct LegalConsentView: View {
                                     title: "Политика обработки персональных данных",
                                     text:
                                         """
-                                        Шаблон политики во исполнение №152‑ФЗ «О персональных данных» и требований локализации (№242‑ФЗ) при применимости.
+                                        Политика определяет порядок и условия обработки персональных данных пользователей сервиса в соответствии с Федеральным законом РФ №152‑ФЗ «О персональных данных» (а также требованиями локализации №242‑ФЗ — при применимости).
                                         
-                                        Оператор: <указать организацию/ИП, ИНН/ОГРН, адрес, контакты>.
+                                        Оператор — организация/ИП, реквизиты и контакты которого указаны в разделе «О компании».
                                         
-                                        Цели: предоставление сервиса записи, управление записями, уведомления, поддержка, улучшение качества.
+                                        Цели обработки: предоставление сервиса записи и управления записями, коммуникация и уведомления, поддержка, обеспечение безопасности и улучшение качества сервиса.
                                         
-                                        Состав данных: имя, контакты (если указаны), данные записей, технические идентификаторы устройства; данные Telegram — при авторизации через Telegram (если используется).
+                                        Категории данных: имя, контактные данные (телефон/e‑mail — если указаны), данные о записях (дата/время/услуга/пост), комментарии, технические идентификаторы устройства; данные Telegram — при входе через Telegram.
                                         
-                                        Права субъекта: запрос сведений, уточнение, блокирование, удаление, отзыв согласия — по контактам оператора.
+                                        Права субъекта: получение сведений, уточнение, блокирование, удаление, отзыв согласия (если применимо). Обращения направляются оператору по контактам.
                                         """
                                 )
                             }
@@ -115,9 +122,9 @@ struct LegalConsentView: View {
                                     title: "Согласие на обработку персональных данных",
                                     text:
                                         """
-                                        Нажимая «Принять», я даю согласие Оператору на обработку моих персональных данных в целях работы приложения (вход, запись на услуги, уведомления, поддержка) в соответствии с №152‑ФЗ.
+                                        Нажимая «Принять», я выражаю согласие Оператору на обработку моих персональных данных в целях предоставления сервиса записи и управления записями, включая сбор, запись, систематизацию, хранение, уточнение, использование, обезличивание, блокирование и удаление, в соответствии с №152‑ФЗ.
                                         
-                                        Согласие может быть отозвано в разделе «Профиль» (или обращением к Оператору).
+                                        Согласие может быть отозвано в любой момент: через обращение к Оператору по контактам, указанным в разделе «О компании», а также путём удаления приложения (если применимо).
                                         """
                                 )
                             }
@@ -153,10 +160,6 @@ struct LegalConsentView: View {
                             .font(.headline)
                     }
                     .buttonStyle(.borderedProminent)
-                    
-                    Text("Это шаблон. Для релиза по РФ заполните реквизиты оператора и уточните состав/цели/сроки хранения.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
                 }
                 .padding(20)
             }
@@ -173,8 +176,22 @@ struct LegalConsentView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .task {
+                do { company = try await APIService.shared.fetchCompany() } catch { company = nil }
+            }
         }
     }
+}
+
+private func operatorLine(_ c: CompanyInfo) -> String {
+    var parts: [String] = []
+    if let inn = c.inn, !inn.isEmpty { parts.append("ИНН \(inn)") }
+    if let ogrn = c.ogrn, !ogrn.isEmpty { parts.append("ОГРН/ОГРНИП \(ogrn)") }
+    let head = c.name + (parts.isEmpty ? "" : " (" + parts.joined(separator: ", ") + ")")
+    let contacts = [c.phone, c.email].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: ", ")
+    let addr = (c.legalAddress?.isEmpty == false ? c.legalAddress : c.address) ?? ""
+    let tail = [addr, contacts].filter { !$0.isEmpty }.joined(separator: " • ")
+    return tail.isEmpty ? head : "\(head) — \(tail)"
 }
 
 struct LegalTextView: View {

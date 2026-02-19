@@ -332,6 +332,28 @@ class APIService {
         }
         return try await request(endpoint: "/news", method: "GET")
     }
+
+    // MARK: - Company (GET /company)
+
+    func fetchCompany() async throws -> CompanyInfo {
+        if APIConfig.useMockData {
+            try await Task.sleep(nanoseconds: 150_000_000)
+            return CompanyInfo(
+                name: "Компания",
+                phone: nil,
+                phoneExtra: nil,
+                email: nil,
+                website: nil,
+                address: nil,
+                legalAddress: nil,
+                inn: nil,
+                ogrn: nil,
+                kpp: nil,
+                directorName: nil
+            )
+        }
+        return try await request(endpoint: "/company", method: "GET")
+    }
     
     // MARK: - Private Methods
     
