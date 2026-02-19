@@ -323,6 +323,16 @@ class APIService {
         )
     }
     
+    // MARK: - Новости (GET /news)
+    
+    func fetchNews() async throws -> [ClientNewsItem] {
+        if APIConfig.useMockData {
+            try await Task.sleep(nanoseconds: 250_000_000)
+            return [] // демо при необходимости добавим позже
+        }
+        return try await request(endpoint: "/news", method: "GET")
+    }
+    
     // MARK: - Private Methods
     
     /// Запрос, возвращающий сырые данные (для PDF и т.п.)

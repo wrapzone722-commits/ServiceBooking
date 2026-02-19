@@ -29,12 +29,19 @@ struct ContentView: View {
                 }
                 .tag(1)
             
+            NewsView()
+                .tabItem {
+                    Image(systemName: "newspaper")
+                    Text("Новости")
+                }
+                .tag(2)
+            
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Профиль")
                 }
-                .tag(2)
+                .tag(3)
         }
         .tint(AppTheme.accent)
         .toolbarBackground(

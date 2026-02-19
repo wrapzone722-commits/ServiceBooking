@@ -12,11 +12,13 @@ import Foundation
 enum MessageSource: String, Codable, CaseIterable {
     case service = "service"
     case admin = "admin"
+    case news = "news"
     
     var displayName: String {
         switch self {
         case .service: return "Сервис"
         case .admin: return "Администратор"
+        case .news: return "Новости"
         }
     }
     
@@ -24,6 +26,7 @@ enum MessageSource: String, Codable, CaseIterable {
         switch self {
         case .service: return "bell.fill"
         case .admin: return "person.fill"
+        case .news: return "newspaper.fill"
         }
     }
 }

@@ -56,6 +56,9 @@
 		047 /* AppStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147 /* AppStyleManager.swift */; };
 		048 /* ThemeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148 /* ThemeSettingsView.swift */; };
 		049 /* ActPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150 /* ActPDFView.swift */; };
+		050 /* NewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151 /* NewsItem.swift */; };
+		051 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152 /* NewsViewModel.swift */; };
+		052 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153 /* NewsView.swift */; };
 		W01 /* ServiceBookingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = W11 /* ServiceBookingWidgetBundle.swift */; };
 		W02 /* ServiceExecutionLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = W12 /* ServiceExecutionLiveActivity.swift */; };
 		W03 /* ServiceExecutionAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = W13 /* ServiceExecutionAttributes.swift */; };
@@ -138,6 +141,9 @@
 		147 /* AppStyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStyleManager.swift; sourceTree = "<group>"; };
 		148 /* ThemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsView.swift; sourceTree = "<group>"; };
 		150 /* ActPDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActPDFView.swift; sourceTree = "<group>"; };
+		151 /* NewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
+		152 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
+		153 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
 		W10 /* ServiceBookingWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ServiceBookingWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		W11 /* ServiceBookingWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBookingWidgetBundle.swift; sourceTree = "<group>"; };
 		W12 /* ServiceExecutionLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionLiveActivity.swift; sourceTree = "<group>"; };
@@ -210,6 +216,7 @@
 				136 /* ProfileSettings.swift */,
 				143 /* ServiceExecutionActivity.swift */,
 				146 /* AppStyle.swift */,
+				151 /* NewsItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -236,6 +243,7 @@
 				109 /* BookingsViewModel.swift */,
 				110 /* ProfileViewModel.swift */,
 				145 /* MessagesViewModel.swift */,
+				152 /* NewsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -246,9 +254,18 @@
 				311 /* Components */,
 				308 /* Home */,
 				309 /* Bookings */,
+				312 /* News */,
 				310 /* Profile */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		312 /* News */ = {
+			isa = PBXGroup;
+			children = (
+				153 /* NewsView.swift */,
+			);
+			path = News;
 			sourceTree = "<group>";
 		};
 		307 /* Resources */ = {
@@ -461,6 +478,9 @@
 				047 /* AppStyleManager.swift in Sources */,
 				048 /* ThemeSettingsView.swift in Sources */,
 				049 /* ActPDFView.swift in Sources */,
+				050 /* NewsItem.swift in Sources */,
+				051 /* NewsViewModel.swift in Sources */,
+				052 /* NewsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
