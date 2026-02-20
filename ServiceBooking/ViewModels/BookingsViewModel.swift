@@ -98,7 +98,9 @@ class BookingsViewModel: ObservableObject {
                 selectedPostId = posts.first { $0.isEnabled }?.id ?? "post_1"
             }
         } catch {
-            posts = DemoData.posts
+            errorMessage = error.localizedDescription
+            posts = []
+            if selectedPostId.isEmpty { selectedPostId = "post_1" }
         }
     }
     

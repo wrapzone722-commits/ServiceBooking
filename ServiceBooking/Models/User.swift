@@ -222,6 +222,7 @@ struct SocialLinks: Codable, Hashable {
 struct UpdateProfileRequest: Codable {
     let firstName: String?
     let lastName: String?
+    let phone: String?
     let email: String?
     let selectedCarId: String?
     let socialLinks: SocialLinks?
@@ -229,6 +230,7 @@ struct UpdateProfileRequest: Codable {
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
         case lastName = "last_name"
+        case phone
         case email
         case selectedCarId = "selected_car_id"
         case socialLinks = "social_links"

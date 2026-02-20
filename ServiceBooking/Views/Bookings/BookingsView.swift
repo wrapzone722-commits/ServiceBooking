@@ -118,11 +118,7 @@ struct BookingsView: View {
         if viewModel.isLoading && viewModel.bookings.isEmpty {
             LoadingView(message: "Загрузка записей...")
         } else if let error = viewModel.errorMessage, viewModel.bookings.isEmpty {
-            ErrorView(message: error, retryAction: { await viewModel.loadBookings() }, onUseDemoFallback: {
-                ConsoleConfigStorage.shared.reset()
-                APIConfig.useMockData = true
-                Task { await viewModel.loadBookings() }
-            }, onDismiss: {
+            ErrorView(message: error, retryAction: { await viewModel.loadBookings() }, onDismiss: {
                 viewModel.clearError()
                 appRouter.returnToQRScan()
             })

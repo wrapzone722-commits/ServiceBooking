@@ -50,10 +50,6 @@ struct HomeView: View {
         } else if let error = viewModel.errorMessage, viewModel.services.isEmpty {
             ErrorView(message: error, retryAction: {
                 await viewModel.loadServices()
-            }, onUseDemoFallback: {
-                ConsoleConfigStorage.shared.reset()
-                APIConfig.useMockData = true
-                Task { await viewModel.loadServices() }
             }, onDismiss: {
                 viewModel.clearError()
                 appRouter.returnToQRScan()

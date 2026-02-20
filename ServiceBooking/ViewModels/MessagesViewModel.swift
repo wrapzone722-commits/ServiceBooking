@@ -16,7 +16,7 @@ final class MessagesViewModel: ObservableObject {
     
     private let api = APIService.shared
     
-    /// Загрузить уведомления с сервера (или демо)
+    /// Загрузить уведомления с сервера
     func load(silentRefresh: Bool = false) async {
         if !silentRefresh { isLoading = true }
         errorMessage = nil
@@ -28,11 +28,7 @@ final class MessagesViewModel: ObservableObject {
             if !silentRefresh {
                 errorMessage = error.localizedDescription
             }
-            if APIConfig.useMockData {
-                messages = DemoData.notifications.sorted { $0.date > $1.date }
-            } else {
-                messages = []
-            }
+            messages = []
         }
         
         isLoading = false

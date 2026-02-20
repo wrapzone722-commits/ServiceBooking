@@ -16,7 +16,6 @@ final class AppRouter: ObservableObject {
     func returnToQRScan() {
         ConsoleConfigStorage.shared.reset()
         APIService.shared.clearAuthToken()
-        APIConfig.useMockData = true
         DispatchQueue.main.async { [weak self] in
             self?.onReturnToQRScan?()
         }

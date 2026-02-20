@@ -23,6 +23,7 @@ class ProfileViewModel: ObservableObject {
     // Редактируемые поля (временные)
     @Published var editFirstName = ""
     @Published var editLastName = ""
+    @Published var editPhone = ""
     @Published var editEmail = ""
     @Published var editTelegram = ""
     @Published var editVK = ""
@@ -98,6 +99,7 @@ class ProfileViewModel: ObservableObject {
             let request = UpdateProfileRequest(
                 firstName: editFirstName,
                 lastName: editLastName,
+                phone: editPhone.isEmpty ? nil : editPhone,
                 email: editEmail.isEmpty ? nil : editEmail,
                 selectedCarId: user?.selectedCarId ?? nil,
                 socialLinks: socialLinks
@@ -122,6 +124,7 @@ class ProfileViewModel: ObservableObject {
         guard let user = user else { return }
         editFirstName = user.firstName
         editLastName = user.lastName
+        editPhone = user.isPhoneDisplayable ? user.phone : ""
         editEmail = user.email ?? ""
         editTelegram = user.socialLinks?.telegram ?? ""
         editVK = user.socialLinks?.vk ?? ""
@@ -185,6 +188,7 @@ class ProfileViewModel: ObservableObject {
         let request = UpdateProfileRequest(
             firstName: u.firstName,
             lastName: u.lastName,
+            phone: nil,
             email: u.email,
             selectedCarId: car.id,
             socialLinks: u.socialLinks

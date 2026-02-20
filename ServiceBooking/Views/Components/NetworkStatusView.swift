@@ -29,7 +29,6 @@ struct NoConnectionBanner: View {
 struct ErrorView: View {
     let message: String
     let retryAction: () async -> Void
-    var onUseDemoFallback: (() -> Void)?
     var onDismiss: (() -> Void)?
     
     var body: some View {
@@ -56,16 +55,6 @@ struct ErrorView: View {
                     .padding(.vertical, 12)
             }
             .buttonStyle(.borderedProminent)
-            
-            if let onUseDemoFallback = onUseDemoFallback {
-                Button {
-                    onUseDemoFallback()
-                } label: {
-                    Text("Использовать демо-режим")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            }
             
             if let onDismiss = onDismiss {
                 Button {

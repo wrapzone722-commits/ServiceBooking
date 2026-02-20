@@ -23,6 +23,7 @@ struct ProfileView: View {
     @State private var showLoyaltySystem = false
     @State private var showThemeSettings = false
     @State private var showCompany = false
+    @State private var showPhoneRequired = false
     
     @ObservedObject private var styleManager = AppStyleManager.shared
     @AppStorage(ProfileSettingsKeys.pushEnabled) private var pushNotificationsEnabled = true
@@ -63,6 +64,12 @@ struct ProfileView: View {
                 }
             }
             .onAppear { Task { await viewModel.loadProfile() } }
+            .onChange(of: viewModel.user?.phone) { _, _ in
+                syncPhoneRequiredState()
+            }
+            .onChange(of: viewModel.user?.id) { _, _ in
+                syncPhoneRequiredState()
+            }
             .onChange(of: scenePhase) { _, newPhase in
                 guard newPhase == .active, let pending = pendingPasteFromMessenger else { return }
                 pendingPasteFromMessenger = nil
@@ -79,9 +86,43 @@ struct ProfileView: View {
                 }
                 .onAppear { Task { await viewModel.loadCars() } }
             }
+            .sheet(isPresented: $showPhoneRequired) {
+                PhoneRequiredView(
+                    initialPhone: viewModel.user?.isPhoneDisplayable == true ? (viewModel.user?.phone ?? "") : "",
+                    onSave: { phone in
+                        viewModel.syncEditFields()
+                        viewModel.editPhone = phone
+                        let ok = await viewModel.saveProfile()
+                        return ok ? nil : (viewModel.errorMessage ?? "Не удалось сохранить")
+                    },
+                    onLogout: {
+                        performLogout()
+                    }
+                )
+            }
         }
     }
     
+    private func syncPhoneRequiredState() {
+        guard let u = viewModel.user else {
+            showPhoneRequired = false
+            return
+        }
+        let needs = !u.isPhoneDisplayable || u.phone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        if needs {
+            // Закрываем вторичные модалки, чтобы не конфликтовать с обязательным вводом телефона.
+            showCarPicker = false
+            showServiceChat = false
+            showHelpFAQ = false
+            showMyContacts = false
+            showLoyaltySystem = false
+            showThemeSettings = false
+            showCompany = false
+            showLegalInfo = false
+        }
+        showPhoneRequired = needs
+    }
+
     private func performLogout() {
         // Сначала закрываем все модалки/алерты, затем уходим на QR-скан на следующем цикле.
         showLogoutConfirm = false
@@ -92,6 +133,8 @@ struct ProfileView: View {
         showLoyaltySystem = false
         showThemeSettings = false
         showLegalInfo = false
+        showCompany = false
+        showPhoneRequired = false
         
         if viewModel.isEditing {
             viewModel.cancelEditing()
@@ -107,11 +150,7 @@ struct ProfileView: View {
         if viewModel.isLoading && viewModel.user == nil {
             LoadingView(message: "Загрузка профиля...")
         } else if let error = viewModel.errorMessage, viewModel.user == nil {
-            ErrorView(message: error, retryAction: { await viewModel.loadProfile() }, onUseDemoFallback: {
-                ConsoleConfigStorage.shared.reset()
-                APIConfig.useMockData = true
-                Task { await viewModel.loadProfile() }
-            }, onDismiss: {
+            ErrorView(message: error, retryAction: { await viewModel.loadProfile() }, onDismiss: {
                 viewModel.clearError()
                 appRouter.returnToQRScan()
             })

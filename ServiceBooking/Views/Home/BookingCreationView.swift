@@ -346,6 +346,15 @@ struct TimeSlotButton: View {
 }
 
 #Preview {
-    BookingCreationView(service: DemoData.services[0])
+    BookingCreationView(service: Service(
+        id: "preview_service",
+        name: "Мойка кузова",
+        description: "Бесконтактная мойка с воском",
+        price: 800,
+        duration: 30,
+        category: "Автоуслуги",
+        imageURL: nil,
+        isActive: true
+    ))
         .environmentObject(BookingsViewModel())
 }

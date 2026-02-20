@@ -162,6 +162,15 @@ struct InfoRow: View {
 }
 
 #Preview {
-    ServiceDetailView(service: DemoData.services[0])
+    ServiceDetailView(service: Service(
+        id: "preview_service",
+        name: "Химчистка салона",
+        description: "Полная химчистка салона автомобиля",
+        price: 5000,
+        duration: 180,
+        category: "Автоуслуги",
+        imageURL: nil,
+        isActive: true
+    ))
         .environmentObject(BookingsViewModel())
 }

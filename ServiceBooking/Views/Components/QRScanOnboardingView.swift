@@ -80,18 +80,6 @@ struct QRScanOnboardingView: View {
                     }
                     .buttonStyle(.bordered)
                     .padding(.horizontal, 32)
-                    Button {
-                        scanError = nil
-                        useDemoMode()
-                    } label: {
-                        Label("Демо-режим (без сервера)", systemImage: "play.circle.fill")
-                            .font(.subheadline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.orange)
-                    .padding(.horizontal, 32)
                 } else {
                     Button {
                         scanError = nil
@@ -192,7 +180,6 @@ struct QRScanOnboardingView: View {
         if let token = result.token, !token.isEmpty {
             // QR содержал токен — сохраняем и подключаемся
             ConsoleConfigStorage.shared.save(baseURL: result.baseURL, token: token)
-            APIConfig.useMockData = false
             isCompleted = true
             return
         }
@@ -211,7 +198,6 @@ struct QRScanOnboardingView: View {
             let response = try await ClientRegistry.register(baseURL: baseURL)
             await MainActor.run {
                 ConsoleConfigStorage.shared.save(baseURL: baseURL, token: response.apiKey)
-                APIConfig.useMockData = false
                 scanError = nil
                 isRegistering = false
                 showManualEntry = false
@@ -225,11 +211,4 @@ struct QRScanOnboardingView: View {
         }
     }
     
-    /// Демо-режим без API (локальные mock-данные)
-    private func useDemoMode() {
-        ConsoleConfigStorage.shared.save(baseURL: "https://api.demo.local/v1", token: nil)
-        APIConfig.useMockData = true
-        isCompleted = true
-    }
-
 }

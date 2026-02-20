@@ -25,7 +25,7 @@ enum APIError: Error, LocalizedError {
         case .noData:
             return "Нет данных от сервера"
         case .decodingError:
-            return "Ошибка обработки данных — формат ответа API не соответствует ожидаемому. Проверьте URL или используйте демо-режим."
+            return "Ошибка обработки данных — формат ответа API не соответствует ожидаемому. Проверьте URL API."
         case .networkError(let error):
             return "Ошибка сети: \(error.localizedDescription)"
         case .serverError(let code, let message):
@@ -50,25 +50,6 @@ struct APIConfig {
     
     /// Таймаут запросов (секунды); увеличен для работы через VPN
     static let requestTimeout: TimeInterval = 60
-    
-    /// Ручной переопределение (nil = считать по конфигу)
-    private static var _useMockDataOverride: Bool?
-
-    /// Демо-режим: по умолчанию из конфига; можно переопределить из UI
-    static var useMockData: Bool {
-        get {
-            if let override = _useMockDataOverride { return override }
-            guard let config = ConsoleConfigStorage.shared.config else { return true }
-            let url = config.baseURL.trimmingCharacters(in: .whitespaces)
-            return url.isEmpty || url == defaultBaseURL
-        }
-        set { _useMockDataOverride = newValue }
-    }
-
-    /// Сбросить переопределение — снова использовать значение по конфигу
-    static func resetUseMockDataOverride() {
-        _useMockDataOverride = nil
-    }
 }
 
 /// Основной сервис для работы с API
@@ -119,22 +100,11 @@ class APIService {
     
     /// Получить список услуг (всегда с сервера)
     func fetchServices() async throws -> [Service] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 300_000_000)
-            return DemoData.services
-        }
         return try await request(endpoint: "/services", method: "GET")
     }
     
     /// Получить детали услуги
     func fetchService(id: String) async throws -> Service {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 200_000_000)
-            guard let service = DemoData.services.first(where: { $0.id == id }) else {
-                throw APIError.noData
-            }
-            return service
-        }
         return try await request(endpoint: "/services/\(id)", method: "GET")
     }
     
@@ -142,32 +112,11 @@ class APIService {
     
     /// Получить записи пользователя (всегда с сервера)
     func fetchBookings() async throws -> [Booking] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 300_000_000)
-            return DemoData.bookings
-        }
         return try await request(endpoint: "/bookings", method: "GET")
     }
     
     /// Создать запись
     func createBooking(request: CreateBookingRequest) async throws -> Booking {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 400_000_000)
-            let service = DemoData.services.first { $0.id == request.serviceId }
-            return Booking(
-                id: UUID().uuidString,
-                serviceId: request.serviceId,
-                serviceName: service?.name ?? "Услуга",
-                userId: "demo_user",
-                dateTime: request.dateTime,
-                status: .pending,
-                price: service?.price ?? 0,
-                duration: service?.duration ?? 60,
-                notes: request.notes,
-                createdAt: Date(),
-                inProgressStartedAt: nil
-            )
-        }
         return try await self.request(
             endpoint: "/bookings",
             method: "POST",
@@ -177,10 +126,6 @@ class APIService {
     
     /// Отправить рейтинг по записи (POST /bookings/:id/rating)
     func submitRating(bookingId: String, rating: Int, comment: String? = nil) async throws {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 200_000_000)
-            return
-        }
         struct RatingRequest: Encodable {
             let rating: Int
             let comment: String?
@@ -198,10 +143,6 @@ class APIService {
 
     /// Отменить запись
     func cancelBooking(id: String) async throws {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 300_000_000)
-            return
-        }
         let _: EmptyResponse = try await request(
             endpoint: "/bookings/\(id)",
             method: "DELETE"
@@ -210,9 +151,6 @@ class APIService {
     
     /// Скачать PDF «Акт выполненных работ» для завершённой записи (GET .../bookings/:id/act)
     func fetchBookingAct(bookingId: String) async throws -> Data {
-        if APIConfig.useMockData {
-            throw APIError.serverError(404, "Акт доступен только при подключении к серверу")
-        }
         return try await requestRaw(endpoint: "/bookings/\(bookingId)/act", method: "GET")
     }
     
@@ -220,11 +158,6 @@ class APIService {
     
     /// Получить доступные слоты (по спецификации: service_id, date, post_id)
     func fetchAvailableSlots(serviceId: String, date: Date, postId: String = "post_1") async throws -> [TimeSlot] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 300_000_000)
-            return generateDemoSlots(for: date)
-        }
-        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone.current
@@ -243,19 +176,11 @@ class APIService {
     
     /// Получить список постов (боксов)
     func fetchPosts() async throws -> [Post] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 200_000_000)
-            return DemoData.posts
-        }
         return try await request(endpoint: "/posts", method: "GET")
     }
     
     /// Получить список папок автомобилей (типы авто из веб-консоли) — GET /api/v1/cars/folders
     func fetchCars() async throws -> [Car] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 150_000_000)
-            return DemoData.cars
-        }
         let folders: [CarFolderResponse] = try await request(endpoint: "/cars/folders", method: "GET")
         return folders.map { folder in
             let items = folder.images.map { CarImageItem(name: $0.name, url: $0.url) }
@@ -272,29 +197,11 @@ class APIService {
 
     /// Получить профиль (всегда с сервера)
     func fetchProfile() async throws -> User {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 200_000_000)
-            return DemoData.user
-        }
         return try await request(endpoint: "/profile", method: "GET")
     }
     
     /// Обновить профиль
     func updateProfile(request: UpdateProfileRequest) async throws -> User {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 300_000_000)
-            var user = DemoData.user
-            if let firstName = request.firstName { user.firstName = firstName }
-            if let lastName = request.lastName { user.lastName = lastName }
-            if let email = request.email { user.email = email }
-            if let carId = request.selectedCarId {
-                user.selectedCarId = carId
-                if let car = DemoData.cars.first(where: { $0.id == carId }), let url = car.imageURL {
-                    user.avatarURL = url
-                }
-            }
-            return user
-        }
         return try await self.request(
             endpoint: "/profile",
             method: "PUT",
@@ -306,17 +213,12 @@ class APIService {
     
     /// Получить список уведомлений/сообщений для текущего клиента
     func fetchNotifications() async throws -> [ServiceChatMessage] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 250_000_000)
-            return DemoData.notifications
-        }
         let list: [APINotificationItem] = try await request(endpoint: "/notifications", method: "GET")
         return list.map { $0.toMessage() }
     }
     
     /// Отметить уведомление как прочитанное (опционально, для веб-консоли)
     func markNotificationRead(id: String) async throws {
-        if APIConfig.useMockData { return }
         let _: EmptyResponse = try await request(
             endpoint: "/notifications/\(id)/read",
             method: "PATCH"
@@ -326,32 +228,12 @@ class APIService {
     // MARK: - Новости (GET /news)
     
     func fetchNews() async throws -> [ClientNewsItem] {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 250_000_000)
-            return [] // демо при необходимости добавим позже
-        }
         return try await request(endpoint: "/news", method: "GET")
     }
 
     // MARK: - Company (GET /company)
 
     func fetchCompany() async throws -> CompanyInfo {
-        if APIConfig.useMockData {
-            try await Task.sleep(nanoseconds: 150_000_000)
-            return CompanyInfo(
-                name: "Компания",
-                phone: nil,
-                phoneExtra: nil,
-                email: nil,
-                website: nil,
-                address: nil,
-                legalAddress: nil,
-                inn: nil,
-                ogrn: nil,
-                kpp: nil,
-                directorName: nil
-            )
-        }
         return try await request(endpoint: "/company", method: "GET")
     }
     
@@ -442,28 +324,6 @@ class APIService {
         return String(data: data, encoding: .utf8)
     }
     
-    /// Демо слоты для тестирования UI
-    private func generateDemoSlots(for date: Date) -> [TimeSlot] {
-        var slots: [TimeSlot] = []
-        let calendar = Calendar.current
-        
-        for hour in 9..<20 {
-            for minute in [0, 30] {
-                var components = calendar.dateComponents([.year, .month, .day], from: date)
-                components.hour = hour
-                components.minute = minute
-                
-                if let slotTime = calendar.date(from: components) {
-                    slots.append(TimeSlot(
-                        id: "\(hour):\(minute)",
-                        time: slotTime,
-                        isAvailable: Bool.random()
-                    ))
-                }
-            }
-        }
-        return slots
-    }
 }
 
 private struct EmptyResponse: Decodable {}

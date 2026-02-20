@@ -3,7 +3,7 @@
 //  ServiceBooking
 //
 //  Сообщения от веб-консоли: сервисные уведомления и сообщения администратора.
-//  Загружаются с API (GET /notifications), в демо — из DemoData + локальный кэш.
+//  Загружаются с API (GET /notifications).
 //
 
 import Foundation
