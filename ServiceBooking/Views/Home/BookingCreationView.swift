@@ -13,11 +13,13 @@ struct BookingCreationView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var bookingsViewModel: BookingsViewModel
+    @EnvironmentObject private var profileViewModel: ProfileViewModel
     
     @State private var notes: String = ""
     @State private var showConfirmation = false
     @State private var showErrorAlert = false
     @State private var reminderTiming: ReminderTiming = .d1
+    @State private var showProfileRequired = false
     
     private static let calendar = Calendar.current
     
@@ -66,6 +68,7 @@ struct BookingCreationView: View {
                 clampSelectedDateToRange()
                 await bookingsViewModel.loadPosts()
                 await bookingsViewModel.loadAvailableSlots(serviceId: service.id, date: bookingsViewModel.selectedDate)
+                await ensureProfileIsComplete()
             }
             .onAppear {
                 clampSelectedDateToRange()
@@ -82,6 +85,17 @@ struct BookingCreationView: View {
                 }
             } message: {
                 Text(bookingsViewModel.errorMessage ?? "Не удалось создать запись.")
+            }
+            .sheet(isPresented: $showProfileRequired) {
+                BookingProfileRequiredView(
+                    onCompleted: {
+                        showProfileRequired = false
+                    },
+                    onCancel: {
+                        showProfileRequired = false
+                        dismiss()
+                    }
+                )
             }
         }
     }
@@ -255,6 +269,8 @@ struct BookingCreationView: View {
                 
                 Button {
                     Task {
+                        let okProfile = await ensureProfileIsComplete()
+                        if !okProfile { return }
                         let success = await bookingsViewModel.createBooking(serviceId: service.id, notes: notes.isEmpty ? nil : notes)
                         if success {
                             showConfirmation = true
@@ -280,6 +296,29 @@ struct BookingCreationView: View {
             .padding()
             .background(AppTheme.secondaryBackground)
         }
+    }
+
+    @discardableResult
+    private func ensureProfileIsComplete() async -> Bool {
+        if profileViewModel.user == nil {
+            await profileViewModel.loadProfile(silentRefresh: true)
+        }
+        if profileViewModel.cars.isEmpty {
+            await profileViewModel.loadCars()
+        }
+        guard let u = profileViewModel.user else { return false }
+
+        let firstNameOk = !u.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let phoneOk = u.isPhoneDisplayable && u.phone.replacingOccurrences(of: "\\D", with: "", options: .regularExpression).count >= 10
+        let carOk = !(u.selectedCarId?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+
+        if firstNameOk && phoneOk && carOk { return true }
+
+        await MainActor.run {
+            profileViewModel.syncEditFields()
+            showProfileRequired = true
+        }
+        return false
     }
 
     private func formatSelectedDateTime() -> String {

@@ -27,6 +27,7 @@ class ProfileViewModel: ObservableObject {
     @Published var editEmail = ""
     @Published var editTelegram = ""
     @Published var editVK = ""
+    @Published var editSelectedCarId: String?
 
     // Список автомобилей для выбора
     @Published private(set) var cars: [Car] = []
@@ -101,7 +102,7 @@ class ProfileViewModel: ObservableObject {
                 lastName: editLastName,
                 phone: editPhone.isEmpty ? nil : editPhone,
                 email: editEmail.isEmpty ? nil : editEmail,
-                selectedCarId: user?.selectedCarId ?? nil,
+                selectedCarId: editSelectedCarId,
                 socialLinks: socialLinks
             )
             
@@ -128,6 +129,7 @@ class ProfileViewModel: ObservableObject {
         editEmail = user.email ?? ""
         editTelegram = user.socialLinks?.telegram ?? ""
         editVK = user.socialLinks?.vk ?? ""
+        editSelectedCarId = user.selectedCarId
     }
     
     func startEditing() {
@@ -195,6 +197,7 @@ class ProfileViewModel: ObservableObject {
         )
         do {
             user = try await APIService.shared.updateProfile(request: request)
+            editSelectedCarId = car.id
             displayedCarId = car.id
             displayedCarImageURL = car.imageURL
             saveDisplayedCar()
@@ -214,6 +217,7 @@ class ProfileViewModel: ObservableObject {
     func clear() {
         user = nil
         isEditing = false
+        editSelectedCarId = nil
         displayedCarId = nil
         displayedCarImageURL = nil
         UserDefaults.standard.removeObject(forKey: Self.displayedCarIdKey)

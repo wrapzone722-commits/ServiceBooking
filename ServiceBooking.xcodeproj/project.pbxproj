@@ -62,6 +62,7 @@
 		054 /* CompanyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155 /* CompanyView.swift */; };
 		055 /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156 /* LegalInfoView.swift */; };
 		056 /* PhoneRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157 /* PhoneRequiredView.swift */; };
+		057 /* BookingProfileRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158 /* BookingProfileRequiredView.swift */; };
 		W01 /* ServiceBookingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = W11 /* ServiceBookingWidgetBundle.swift */; };
 		W02 /* ServiceExecutionLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = W12 /* ServiceExecutionLiveActivity.swift */; };
 		W03 /* ServiceExecutionAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = W13 /* ServiceExecutionAttributes.swift */; };
@@ -150,6 +151,7 @@
 		155 /* CompanyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyView.swift; sourceTree = "<group>"; };
 		156 /* LegalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInfoView.swift; sourceTree = "<group>"; };
 		157 /* PhoneRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRequiredView.swift; sourceTree = "<group>"; };
+		158 /* BookingProfileRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingProfileRequiredView.swift; sourceTree = "<group>"; };
 		W10 /* ServiceBookingWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ServiceBookingWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		W11 /* ServiceBookingWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBookingWidgetBundle.swift; sourceTree = "<group>"; };
 		W12 /* ServiceExecutionLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionLiveActivity.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 			children = (
 				115 /* ProfileView.swift */,
 				157 /* PhoneRequiredView.swift */,
+				158 /* BookingProfileRequiredView.swift */,
 				135 /* ServiceChatView.swift */,
 				137 /* HelpFAQView.swift */,
 				138 /* PrivacyPolicyView.swift */,
@@ -493,6 +496,7 @@
 				054 /* CompanyView.swift in Sources */,
 				055 /* LegalInfoView.swift in Sources */,
 				056 /* PhoneRequiredView.swift in Sources */,
+				057 /* BookingProfileRequiredView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

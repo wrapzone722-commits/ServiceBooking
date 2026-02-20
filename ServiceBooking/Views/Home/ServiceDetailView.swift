@@ -13,7 +13,9 @@ struct ServiceDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var bookingsViewModel: BookingsViewModel
+    @EnvironmentObject private var profileViewModel: ProfileViewModel
     @State private var showBookingSheet = false
+    @State private var showProfileRequired = false
     
     var body: some View {
         NavigationStack {
@@ -41,6 +43,17 @@ struct ServiceDetailView: View {
             .safeAreaInset(edge: .bottom) { bookButton }
             .sheet(isPresented: $showBookingSheet) {
                 BookingCreationView(service: service)
+            }
+            .sheet(isPresented: $showProfileRequired) {
+                BookingProfileRequiredView(
+                    onCompleted: {
+                        showProfileRequired = false
+                        showBookingSheet = true
+                    },
+                    onCancel: {
+                        showProfileRequired = false
+                    }
+                )
             }
         }
     }
@@ -115,7 +128,7 @@ struct ServiceDetailView: View {
             Divider()
             
             Button {
-                showBookingSheet = true
+                Task { await openBookingFlow() }
             } label: {
                 HStack {
                     Text("Записаться")
@@ -130,6 +143,28 @@ struct ServiceDetailView: View {
             .buttonStyle(.borderedProminent)
             .padding()
             .background(AppTheme.secondaryBackground)
+        }
+    }
+
+    private func openBookingFlow() async {
+        if profileViewModel.user == nil {
+            await profileViewModel.loadProfile(silentRefresh: true)
+        }
+        if profileViewModel.cars.isEmpty {
+            await profileViewModel.loadCars()
+        }
+
+        let firstNameOk = !(profileViewModel.user?.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+        let phoneDigits = profileViewModel.user.map { $0.phone.replacingOccurrences(of: "\\D", with: "", options: .regularExpression) } ?? ""
+        let phoneOk = phoneDigits.count >= 10 && (profileViewModel.user?.isPhoneDisplayable ?? false)
+        let carOk = !(profileViewModel.user?.selectedCarId?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
+
+        if firstNameOk && phoneOk && carOk {
+            showBookingSheet = true
+        } else {
+            // Подготовим поля редактирования — пользователю не нужно заполнять с нуля.
+            profileViewModel.syncEditFields()
+            showProfileRequired = true
         }
     }
 }
