@@ -48,6 +48,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: read
+    continue-on-error: true  # не ронять весь workflow при ошибке пуша в другой репо
     steps:
       - name: Checkout
         uses: actions/checkout@v4
