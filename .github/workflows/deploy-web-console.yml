@@ -1,5 +1,6 @@
-# Сборка и публикация Docker-образа веб-консоли.
+# Сборка и публикация Docker-образа веб-консоли + синхронизация в репозиторий service-booking-console.
 # Новый деплой: вкладка Actions → "Build Web Console" → Run workflow.
+# Для job sync-console нужен секрет: CONSOLE_PUSH_TOKEN (PAT с правами push в wrapzone722-commits/service-booking-console).
 name: Build Web Console
 
 on:
@@ -41,3 +42,27 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/service-booking-console:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  sync-console:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push web-console to service-booking-console
+        env:
+          CONSOLE_PUSH_TOKEN: ${{ secrets.CONSOLE_PUSH_TOKEN }}
+        run: |
+          if [ -z "$CONSOLE_PUSH_TOKEN" ]; then
+            echo "CONSOLE_PUSH_TOKEN not set, skipping sync to service-booking-console"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git subtree split --prefix=web-console -b web-console-branch
+          git push https://x-access-token:${CONSOLE_PUSH_TOKEN}@github.com/wrapzone722-commits/service-booking-console.git web-console-branch:express-console
