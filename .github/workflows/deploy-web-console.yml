@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - 'web-console/**'
+      - '.github/workflows/deploy-web-console.yml'
   workflow_dispatch:  # Ручной запуск: "Создать новый деплой"
 
 jobs:
