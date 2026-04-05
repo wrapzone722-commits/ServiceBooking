@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Обязательное заполнение профиля перед созданием записи.
-/// Требуем: имя, телефон, автомобиль.
+/// Требуем: имя и телефон. Информация об автомобиле не обязательна.
 struct BookingProfileRequiredView: View {
     let onCompleted: () -> Void
     let onCancel: () -> Void
@@ -34,34 +34,6 @@ struct BookingProfileRequiredView: View {
                     Text("Имя и телефон нужны, чтобы подтвердить запись и связаться с вами.")
                 }
 
-                Section {
-                    if profileViewModel.isLoadingCars {
-                        HStack {
-                            ProgressView()
-                            Text("Загружаем автомобили…")
-                                .foregroundStyle(.secondary)
-                        }
-                    } else if profileViewModel.cars.isEmpty {
-                        Button("Загрузить список автомобилей") {
-                            Task { await profileViewModel.loadCars() }
-                        }
-                    } else {
-                        Picker("Автомобиль", selection: Binding(
-                            get: { profileViewModel.editSelectedCarId ?? "" },
-                            set: { profileViewModel.editSelectedCarId = $0.isEmpty ? nil : $0 }
-                        )) {
-                            Text("Выберите…").tag("")
-                            ForEach(profileViewModel.cars) { car in
-                                Text(car.name).tag(car.id)
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Автомобиль")
-                } footer: {
-                    Text("Выберите тип автомобиля — это поможет нам подготовиться к услуге.")
-                }
-
                 if let msg = localError ?? profileViewModel.errorMessage {
                     Section {
                         Text(msg)
@@ -87,9 +59,6 @@ struct BookingProfileRequiredView: View {
                 if profileViewModel.user == nil {
                     Task { await profileViewModel.loadProfile(silentRefresh: true) }
                 }
-                if profileViewModel.cars.isEmpty {
-                    Task { await profileViewModel.loadCars() }
-                }
                 if profileViewModel.editFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     focusedField = .firstName
                 } else if cleanedDigits(profileViewModel.editPhone).count < 10 {
@@ -103,8 +72,7 @@ struct BookingProfileRequiredView: View {
     private var isValid: Bool {
         let firstNameOk = !profileViewModel.editFirstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let phoneOk = cleanedDigits(profileViewModel.editPhone).count >= 10
-        let carOk = !(profileViewModel.editSelectedCarId?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
-        return firstNameOk && phoneOk && carOk
+        return firstNameOk && phoneOk
     }
 
     private func save() async {
@@ -112,7 +80,7 @@ struct BookingProfileRequiredView: View {
         isSaving = true
 
         if !isValid {
-            localError = "Заполните имя, телефон и автомобиль"
+            localError = "Заполните имя и телефон"
             isSaving = false
             return
         }

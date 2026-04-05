@@ -181,6 +181,10 @@ class ProfileViewModel: ObservableObject {
         } catch {
             cars = []
         }
+        // Автоматически выбираем папку для отображения фото (без участия пользователя).
+        if displayedCarId == nil {
+            displayedCarId = user?.selectedCarId ?? cars.first?.id
+        }
         isLoadingCars = false
     }
 

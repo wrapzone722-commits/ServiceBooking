@@ -21,6 +21,13 @@ struct ServiceDetailView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
+                    if let img = service.imageURL, !img.isEmpty {
+                        CompressedRemoteImage(urlString: img, maxPixelSide: 960, contentMode: .fill)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 200)
+                            .clipped()
+                            .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius, style: .continuous))
+                    }
                     headerSection
                     
                     infoSection
@@ -150,16 +157,12 @@ struct ServiceDetailView: View {
         if profileViewModel.user == nil {
             await profileViewModel.loadProfile(silentRefresh: true)
         }
-        if profileViewModel.cars.isEmpty {
-            await profileViewModel.loadCars()
-        }
 
         let firstNameOk = !(profileViewModel.user?.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
         let phoneDigits = profileViewModel.user.map { $0.phone.replacingOccurrences(of: "\\D", with: "", options: .regularExpression) } ?? ""
         let phoneOk = phoneDigits.count >= 10 && (profileViewModel.user?.isPhoneDisplayable ?? false)
-        let carOk = !(profileViewModel.user?.selectedCarId?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
 
-        if firstNameOk && phoneOk && carOk {
+        if firstNameOk && phoneOk {
             showBookingSheet = true
         } else {
             // Подготовим поля редактирования — пользователю не нужно заполнять с нуля.

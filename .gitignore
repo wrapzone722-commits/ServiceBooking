@@ -4,6 +4,7 @@ build/
 *.xcuserstate
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
 *.pbxuser
 *.mode1v3
 *.mode2v3
@@ -21,3 +22,4 @@ build/
 # Web Console
 web-console/node_modules/
 web-console/data/
+web-console/.env

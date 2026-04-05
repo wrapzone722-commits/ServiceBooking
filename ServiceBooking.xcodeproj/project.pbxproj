@@ -12,7 +12,6 @@
 		003 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103 /* Service.swift */; };
 		004 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104 /* Booking.swift */; };
 		005 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105 /* User.swift */; };
-		033 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149 /* Car.swift */; };
 		006 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106 /* APIService.swift */; };
 		007 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107 /* NetworkMonitor.swift */; };
 		008 /* ServicesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108 /* ServicesViewModel.swift */; };
@@ -39,6 +38,7 @@
 		030 /* ClientRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131 /* ClientRegistry.swift */; };
 		031 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132 /* KeychainStorage.swift */; };
 		032 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133 /* Post.swift */; };
+		033 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149 /* Car.swift */; };
 		034 /* ServiceChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134 /* ServiceChatMessage.swift */; };
 		035 /* ServiceChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135 /* ServiceChatView.swift */; };
 		036 /* ProfileSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136 /* ProfileSettings.swift */; };
@@ -63,6 +63,15 @@
 		055 /* LegalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156 /* LegalInfoView.swift */; };
 		056 /* PhoneRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157 /* PhoneRequiredView.swift */; };
 		057 /* BookingProfileRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158 /* BookingProfileRequiredView.swift */; };
+		058 /* ActHTMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159 /* ActHTMLView.swift */; };
+		059 /* LoyaltyReward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160 /* LoyaltyReward.swift */; };
+		060 /* LoyaltyRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161 /* LoyaltyRewardsView.swift */; };
+		061 /* RatedBookingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162 /* RatedBookingsStorage.swift */; };
+		062 /* BookingReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163 /* BookingReminderScheduler.swift */; };
+		063 /* CalendarEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164 /* CalendarEventService.swift */; };
+		064 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165 /* AppDelegate.swift */; };
+		065 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166 /* PushNotificationService.swift */; };
+		066 /* CompressedRemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168 /* CompressedRemoteImage.swift */; };
 		W01 /* ServiceBookingWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = W11 /* ServiceBookingWidgetBundle.swift */; };
 		W02 /* ServiceExecutionLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = W12 /* ServiceExecutionLiveActivity.swift */; };
 		W03 /* ServiceExecutionAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = W13 /* ServiceExecutionAttributes.swift */; };
@@ -100,7 +109,6 @@
 		103 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		104 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
 		105 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		149 /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		106 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		107 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		108 /* ServicesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewModel.swift; sourceTree = "<group>"; };
@@ -143,6 +151,7 @@
 		146 /* AppStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStyle.swift; sourceTree = "<group>"; };
 		147 /* AppStyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStyleManager.swift; sourceTree = "<group>"; };
 		148 /* ThemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsView.swift; sourceTree = "<group>"; };
+		149 /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		150 /* ActPDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActPDFView.swift; sourceTree = "<group>"; };
 		151 /* NewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
 		152 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
@@ -152,6 +161,17 @@
 		156 /* LegalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalInfoView.swift; sourceTree = "<group>"; };
 		157 /* PhoneRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneRequiredView.swift; sourceTree = "<group>"; };
 		158 /* BookingProfileRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingProfileRequiredView.swift; sourceTree = "<group>"; };
+		159 /* ActHTMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActHTMLView.swift; sourceTree = "<group>"; };
+		160 /* LoyaltyReward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoyaltyReward.swift; sourceTree = "<group>"; };
+		161 /* LoyaltyRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoyaltyRewardsView.swift; sourceTree = "<group>"; };
+		162 /* RatedBookingsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatedBookingsStorage.swift; sourceTree = "<group>"; };
+		163 /* BookingReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingReminderScheduler.swift; sourceTree = "<group>"; };
+		164 /* CalendarEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventService.swift; sourceTree = "<group>"; };
+		165 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		166 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		167 /* ServiceBooking.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ServiceBooking.entitlements; sourceTree = "<group>"; };
+		168 /* CompressedRemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompressedRemoteImage.swift; sourceTree = "<group>"; };
+		52817D052F71FE6C008E43EC /* ServiceBooking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ServiceBooking.xcodeproj; sourceTree = SOURCE_ROOT; };
 		W10 /* ServiceBookingWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ServiceBookingWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		W11 /* ServiceBookingWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceBookingWidgetBundle.swift; sourceTree = "<group>"; };
 		W12 /* ServiceExecutionLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExecutionLiveActivity.swift; sourceTree = "<group>"; };
@@ -180,6 +200,7 @@
 		300 = {
 			isa = PBXGroup;
 			children = (
+				52817D052F71FE6C008E43EC /* ServiceBooking.xcodeproj */,
 				301 /* ServiceBooking */,
 				W15 /* ServiceBookingWidget */,
 				302 /* Products */,
@@ -190,8 +211,10 @@
 			isa = PBXGroup;
 			children = (
 				122 /* Info.plist */,
+				167 /* ServiceBooking.entitlements */,
 				121 /* PrivacyInfo.xcprivacy */,
 				101 /* ServiceBookingApp.swift */,
+				165 /* AppDelegate.swift */,
 				102 /* ContentView.swift */,
 				303 /* Models */,
 				304 /* Services */,
@@ -217,6 +240,7 @@
 				103 /* Service.swift */,
 				104 /* Booking.swift */,
 				149 /* Car.swift */,
+				160 /* LoyaltyReward.swift */,
 				105 /* User.swift */,
 				133 /* Post.swift */,
 				134 /* ServiceChatMessage.swift */,
@@ -239,6 +263,10 @@
 				130 /* AppRouter.swift */,
 				131 /* ClientRegistry.swift */,
 				132 /* KeychainStorage.swift */,
+				162 /* RatedBookingsStorage.swift */,
+				163 /* BookingReminderScheduler.swift */,
+				164 /* CalendarEventService.swift */,
+				166 /* PushNotificationService.swift */,
 				147 /* AppStyleManager.swift */,
 			);
 			path = Services;
@@ -268,14 +296,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		312 /* News */ = {
-			isa = PBXGroup;
-			children = (
-				153 /* NewsView.swift */,
-			);
-			path = News;
-			sourceTree = "<group>";
-		};
 		307 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -301,6 +321,7 @@
 			children = (
 				114 /* BookingsView.swift */,
 				150 /* ActPDFView.swift */,
+				159 /* ActHTMLView.swift */,
 				142 /* ServiceExecutionView.swift */,
 				144 /* ServiceExecutionLiveActivityView.swift */,
 			);
@@ -321,6 +342,7 @@
 				139 /* TermsOfUseView.swift */,
 				140 /* MyContactsView.swift */,
 				141 /* LoyaltySystemView.swift */,
+				161 /* LoyaltyRewardsView.swift */,
 				148 /* ThemeSettingsView.swift */,
 			);
 			path = Profile;
@@ -335,8 +357,22 @@
 				124 /* AppTheme.swift */,
 				127 /* QRScannerView.swift */,
 				128 /* QRScanOnboardingView.swift */,
+				168 /* CompressedRemoteImage.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		312 /* News */ = {
+			isa = PBXGroup;
+			children = (
+				153 /* NewsView.swift */,
+			);
+			path = News;
+			sourceTree = "<group>";
+		};
+		52DC0D1E2F78576D00D61CCA /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		W15 /* ServiceBookingWidget */ = {
@@ -418,6 +454,12 @@
 			mainGroup = 300;
 			productRefGroup = 302 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 52DC0D1E2F78576D00D61CCA /* Products */;
+					ProjectRef = 52817D052F71FE6C008E43EC /* ServiceBooking.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				400 /* ServiceBooking */,
@@ -461,6 +503,7 @@
 				013 /* BookingCreationView.swift in Sources */,
 				014 /* BookingsView.swift in Sources */,
 				015 /* ProfileView.swift in Sources */,
+				066 /* CompressedRemoteImage.swift in Sources */,
 				017 /* NetworkStatusView.swift in Sources */,
 				018 /* AccessibilityModifiers.swift in Sources */,
 				022 /* SplashView.swift in Sources */,
@@ -481,6 +524,11 @@
 				039 /* TermsOfUseView.swift in Sources */,
 				040 /* MyContactsView.swift in Sources */,
 				041 /* LoyaltySystemView.swift in Sources */,
+				059 /* LoyaltyReward.swift in Sources */,
+				060 /* LoyaltyRewardsView.swift in Sources */,
+				061 /* RatedBookingsStorage.swift in Sources */,
+				062 /* BookingReminderScheduler.swift in Sources */,
+				063 /* CalendarEventService.swift in Sources */,
 				042 /* ServiceExecutionView.swift in Sources */,
 				043 /* ServiceExecutionActivity.swift in Sources */,
 				044 /* ServiceExecutionLiveActivityView.swift in Sources */,
@@ -489,6 +537,7 @@
 				047 /* AppStyleManager.swift in Sources */,
 				048 /* ThemeSettingsView.swift in Sources */,
 				049 /* ActPDFView.swift in Sources */,
+				058 /* ActHTMLView.swift in Sources */,
 				050 /* NewsItem.swift in Sources */,
 				051 /* NewsViewModel.swift in Sources */,
 				052 /* NewsView.swift in Sources */,
@@ -497,6 +546,8 @@
 				055 /* LegalInfoView.swift in Sources */,
 				056 /* PhoneRequiredView.swift in Sources */,
 				057 /* BookingProfileRequiredView.swift in Sources */,
+				064 /* AppDelegate.swift in Sources */,
+				065 /* PushNotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +705,7 @@
 				INFOPLIST_FILE = ServiceBooking/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Service Booking";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 Service Booking. All rights reserved.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -688,6 +740,7 @@
 				INFOPLIST_FILE = ServiceBooking/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Service Booking";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2025 Service Booking. All rights reserved.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

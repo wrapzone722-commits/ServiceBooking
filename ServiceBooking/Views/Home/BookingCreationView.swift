@@ -271,7 +271,14 @@ struct BookingCreationView: View {
                     Task {
                         let okProfile = await ensureProfileIsComplete()
                         if !okProfile { return }
-                        let success = await bookingsViewModel.createBooking(serviceId: service.id, notes: notes.isEmpty ? nil : notes)
+                        let success = await bookingsViewModel.createBooking(
+                            serviceId: service.id,
+                            serviceName: service.name,
+                            notes: notes.isEmpty ? nil : notes,
+                            reminderTiming: reminderTiming,
+                            clientFirstName: profileViewModel.user?.firstName,
+                            clientPhone: profileViewModel.user?.phone
+                        )
                         if success {
                             showConfirmation = true
                         } else {
@@ -303,16 +310,12 @@ struct BookingCreationView: View {
         if profileViewModel.user == nil {
             await profileViewModel.loadProfile(silentRefresh: true)
         }
-        if profileViewModel.cars.isEmpty {
-            await profileViewModel.loadCars()
-        }
         guard let u = profileViewModel.user else { return false }
 
         let firstNameOk = !u.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let phoneOk = u.isPhoneDisplayable && u.phone.replacingOccurrences(of: "\\D", with: "", options: .regularExpression).count >= 10
-        let carOk = !(u.selectedCarId?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
 
-        if firstNameOk && phoneOk && carOk { return true }
+        if firstNameOk && phoneOk { return true }
 
         await MainActor.run {
             profileViewModel.syncEditFields()
