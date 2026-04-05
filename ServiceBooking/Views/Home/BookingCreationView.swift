@@ -16,6 +16,10 @@ struct BookingCreationView: View {
     @EnvironmentObject private var profileViewModel: ProfileViewModel
     
     @State private var notes: String = ""
+    @State private var inviteCodeInput: String = ""
+    @State private var invitePreviewHint: String?
+    @State private var inviteAccepted: Bool = false
+    @State private var invitePreviewTask: Task<Void, Never>?
     @State private var showConfirmation = false
     @State private var showErrorAlert = false
     @State private var reminderTiming: ReminderTiming = .d1
@@ -37,6 +41,7 @@ struct BookingCreationView: View {
                     serviceInfoSection
                     dateSelectionSection
                     postSelectionSection
+                    inviteCodeSection
                     timeSelectionSection
                     reminderSection
                     notesSection
@@ -72,6 +77,9 @@ struct BookingCreationView: View {
             }
             .onAppear {
                 clampSelectedDateToRange()
+            }
+            .onDisappear {
+                invitePreviewTask?.cancel()
             }
             .alert("Запись создана!", isPresented: $showConfirmation) {
                 Button("Отлично") { dismiss() }
@@ -232,6 +240,27 @@ struct BookingCreationView: View {
         }
     }
     
+    private var inviteCodeSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Код приглашения")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(AppTheme.label)
+            TextField("Необязательно — из QR или сообщения", text: $inviteCodeInput)
+                .textInputAutocapitalization(.characters)
+                .autocorrectionDisabled()
+                .padding()
+                .background(AppTheme.tertiaryBackground)
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .onChange(of: inviteCodeInput) { _, _ in scheduleInvitePreview() }
+            if let h = invitePreviewHint {
+                Text(h)
+                    .font(.caption)
+                    .foregroundStyle(inviteAccepted ? Color.green : AppTheme.secondaryLabel)
+            }
+        }
+    }
+    
     private var notesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Комментарий")
@@ -259,9 +288,19 @@ struct BookingCreationView: View {
                             Text(formatSelectedDateTime())
                                 .font(.subheadline)
                                 .foregroundStyle(AppTheme.secondaryLabel)
-                            Text(service.formattedPrice)
-                                .font(.headline)
-                                .foregroundStyle(Color.accentColor)
+                            if inviteAccepted {
+                                Text("0 ₽")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.accentColor)
+                                Text(service.formattedPrice)
+                                    .font(.caption)
+                                    .strikethrough()
+                                    .foregroundStyle(AppTheme.secondaryLabel)
+                            } else {
+                                Text(service.formattedPrice)
+                                    .font(.headline)
+                                    .foregroundStyle(Color.accentColor)
+                            }
                         }
                         Spacer()
                     }
@@ -271,13 +310,16 @@ struct BookingCreationView: View {
                     Task {
                         let okProfile = await ensureProfileIsComplete()
                         if !okProfile { return }
+                        let trimmedCode = inviteCodeInput.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let codeToSend = inviteAccepted && !trimmedCode.isEmpty ? trimmedCode : nil
                         let success = await bookingsViewModel.createBooking(
                             serviceId: service.id,
                             serviceName: service.name,
                             notes: notes.isEmpty ? nil : notes,
                             reminderTiming: reminderTiming,
                             clientFirstName: profileViewModel.user?.firstName,
-                            clientPhone: profileViewModel.user?.phone
+                            clientPhone: profileViewModel.user?.phone,
+                            inviteCode: codeToSend
                         )
                         if success {
                             showConfirmation = true
@@ -324,6 +366,47 @@ struct BookingCreationView: View {
         return false
     }
 
+    private func scheduleInvitePreview() {
+        invitePreviewTask?.cancel()
+        let snapshot = inviteCodeInput
+        invitePreviewTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 450_000_000)
+            guard !Task.isCancelled else { return }
+            let trimmed = snapshot.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty {
+                invitePreviewHint = nil
+                inviteAccepted = false
+                return
+            }
+            do {
+                let p = try await APIService.shared.fetchInvitePreview(code: trimmed)
+                guard !Task.isCancelled else { return }
+                if p.valid, p.service_id == service.id {
+                    if let pid = p.post_id, !pid.isEmpty, bookingsViewModel.selectedPostId != pid {
+                        bookingsViewModel.selectedPostId = pid
+                        await bookingsViewModel.loadAvailableSlots(serviceId: service.id, date: bookingsViewModel.selectedDate)
+                    }
+                    inviteAccepted = true
+                    if let l = p.label, !l.isEmpty {
+                        invitePreviewHint = "Код принят: \(l). Запись будет бесплатной."
+                    } else {
+                        invitePreviewHint = "Код принят. Запись будет бесплатной."
+                    }
+                } else if p.valid {
+                    inviteAccepted = false
+                    invitePreviewHint = "Этот код для другой услуги (\(p.service_name ?? "другая"))."
+                } else {
+                    inviteAccepted = false
+                    invitePreviewHint = p.error
+                }
+            } catch {
+                guard !Task.isCancelled else { return }
+                invitePreviewHint = nil
+                inviteAccepted = false
+            }
+        }
+    }
+    
     private func formatSelectedDateTime() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ru_RU")
